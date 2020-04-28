@@ -1,5 +1,5 @@
 #### 1. 谈谈对Zygot的理解
-  源码路径
+    源码路径
     system/core/rootdir/
                         init.rc
                         init.zygote32.rc
