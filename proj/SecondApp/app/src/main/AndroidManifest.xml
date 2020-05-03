@@ -9,6 +9,10 @@
     <!--    <permission android:protectionLevel="signature" android:name="com.cw.permission.TEST" />-->
     <permission android:protectionLevel="normal" android:name="com.cw.permission.TEST" />
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+
     <application
         android:persistent="true"
         android:allowBackup="true"
@@ -17,7 +21,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+<!--        <activity android:name=".MainActivity">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
+        <activity android:name=".MediaTestActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
