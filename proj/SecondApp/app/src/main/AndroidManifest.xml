@@ -13,6 +13,9 @@
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>
     <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 
+    <permission android:name="com.cw.secondapp.permission.BINDSERVICE"
+        android:protectionLevel="signatureOrSystem" />
+
     <application
         android:persistent="true"
         android:allowBackup="true"
@@ -51,6 +54,11 @@
             android:name=".BusinessContentProvider"
             android:exported="true">
         </provider>
+
+        <service android:name=".MessengerService"
+            android:exported="true"
+            android:permission="com.cw.secondapp.permission.BINDSERVICE">
+        </service>
 
     </application>
 
