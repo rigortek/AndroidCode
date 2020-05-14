@@ -17,7 +17,10 @@
     
 
 #### 2. 聊一聊Android系统的启动
+    https://ayusch.com/android-internals-the-android-os-boot-process/
 
+![avatar](https://github.com/rigortek/AndroidInterview/blob/master/image/cycle_of_the_bootup_process_in_android.png
+)
 
 #### 3. 怎么添加一个系统服务
 
