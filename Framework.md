@@ -17,16 +17,18 @@
     
 
 #### 2. 聊一聊Android系统的启动
-    https://ayusch.com/android-internals-the-android-os-boot-process/
+<https://ayusch.com/android-internals-the-android-os-boot-process>
 
 ![avatar](https://github.com/rigortek/AndroidInterview/blob/master/image/cycle_of_the_bootup_process_in_android.png
 )
 
 #### 3. 怎么添加一个系统服务
-
+    固定步骤，此处不表
 
 #### 4. 系统服务和bind的应用服务有什么区别
-
+    启动方式的区别
+    注册方式的区别
+    使用方式的区别
 
 #### 5. ServiceManager启动和工作原理是怎样的
 
