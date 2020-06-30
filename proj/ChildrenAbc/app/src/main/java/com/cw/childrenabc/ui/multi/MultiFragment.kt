@@ -1,4 +1,4 @@
-package com.cw.childrenabc.ui.home
+package com.cw.childrenabc.ui.multi
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,20 +10,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.cw.childrenabc.R
 
-class HomeFragment : Fragment() {
+class MultiFragment : Fragment() {
 
-    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var multiViewModel: MultiViewModel
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_home, container, false)
+        multiViewModel =
+                ViewModelProviders.of(this).get(MultiViewModel::class.java)
+        val root = inflater.inflate(R.layout.fragment_multi, container, false)
         val textView: TextView = root.findViewById(R.id.text_home)
-        homeViewModel.text.observe(viewLifecycleOwner, Observer {
+        multiViewModel.text.observe(viewLifecycleOwner, Observer {
             textView.text = it
         })
         return root

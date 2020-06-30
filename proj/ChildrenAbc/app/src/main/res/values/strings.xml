@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">ChildrenAbc</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_single_examine">单个认识</string>
+    <string name="title_multi_examine">多个查找</string>
+    <string name="title_settings">设置</string>
 </resources>

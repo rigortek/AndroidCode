@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_single_examine">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.cw.childrenabc.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_single_examine"
+        android:name="com.cw.childrenabc.ui.multi.MultiFragment"
+        android:label="@string/title_single_examine"
+        tools:layout="@layout/fragment_multi" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.cw.childrenabc.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_multi_examine"
+        android:name="com.cw.childrenabc.ui.single.SingleFragment"
+        android:label="@string/title_multi_examine"
+        tools:layout="@layout/fragment_single" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.cw.childrenabc.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_settings"
+        android:name="com.cw.childrenabc.ui.setting.SettingFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_setting" />
 </navigation>
