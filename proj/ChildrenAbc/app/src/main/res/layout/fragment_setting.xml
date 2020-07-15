@@ -20,13 +20,15 @@
             android:id="@+id/alphabet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="字母" />
+            android:text="字母"
+            android:textSize="30sp"/>
 
         <RadioButton
             android:id="@+id/number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="数字" />
+            android:text="数字"
+            android:textSize="30sp"/>
     </RadioGroup>
 
     <RadioGroup
@@ -42,14 +44,15 @@
             android:id="@+id/big_alphabet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="大写字母" />
+            android:text="大写字母"
+            android:textSize="30sp"/>
 
         <RadioButton
             android:id="@+id/small_alphabet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="小写字母" />
+            android:text="小写字母"
+            android:textSize="30sp" />
     </RadioGroup>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

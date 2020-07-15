@@ -27,10 +27,10 @@ class SingleFragment : Fragment() {
         singleViewModel =
                 ViewModelProviders.of(this).get(SingleViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_single, container, false)
-        textViewCurCharactor = root.findViewById(R.id.text_cur_charactor)
-        singleViewModel.text.observe(viewLifecycleOwner, Observer {
-            textViewCurCharactor.text = it
-        })
+//        textViewCurCharactor = root.findViewById(R.id.text_cur_charactor)
+//        singleViewModel.text.observe(viewLifecycleOwner, Observer {
+//            textViewCurCharactor.text = it
+//        })
 
         radioButtonWrong = root.findViewById(R.id.check_wrong)
         radioButtonRight = root.findViewById(R.id.check_right)
