@@ -1,16 +1,17 @@
 package com.cw.childrenabc.ui.setting
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
 import android.widget.RadioGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.cw.childrenabc.AppPreferences
+import com.cw.childrenabc.Constants
 import com.cw.childrenabc.R
 
 class SettingFragment : Fragment() {
@@ -30,21 +31,21 @@ class SettingFragment : Fragment() {
 //            textView.text = it
 //        })
         val appPreferences: AppPreferences = AppPreferences(activity)
-        val number_or_alphabet = root.findViewById(R.id.number_or_alphabet) as RadioGroup
+        val number_or_letter = root.findViewById(R.id.number_or_letter) as RadioGroup
 
         val number_or_alphabet_value = appPreferences.get(AppPreferences.NUMBER_OR_ALPHABET, "number")
-        number_or_alphabet.clearCheck()
+        number_or_letter.clearCheck()
         if ("number".equals(number_or_alphabet_value)) {
-            number_or_alphabet.check(R.id.number)
+            number_or_letter.check(R.id.number)
 //            val number = root.findViewById(R.id.number) as RadioButton
 //            number.setChecked(true)
         } else if ("alphabet".equals(number_or_alphabet_value)) {
-            number_or_alphabet.check(R.id.alphabet)
+            number_or_letter.check(R.id.alphabet)
 //            val alphabet = root.findViewById(R.id.alphabet) as RadioButton
 //            alphabet.setChecked(true)
         }
 
-        number_or_alphabet.setOnCheckedChangeListener(object: RadioGroup.OnCheckedChangeListener {
+        number_or_letter.setOnCheckedChangeListener(object: RadioGroup.OnCheckedChangeListener {
             override fun onCheckedChanged(p0: RadioGroup?, p1: Int) {
 
                 if (p1 == R.id.number) {
@@ -55,16 +56,16 @@ class SettingFragment : Fragment() {
             }
         })
 
-        val big_or_small_alphabet = root.findViewById(R.id.big_or_small_alphabet) as RadioGroup
-        big_or_small_alphabet.clearCheck()
+        val big_or_small_letter = root.findViewById(R.id.big_or_small_letter) as RadioGroup
+        big_or_small_letter.clearCheck()
         val big_or_small_alphabet_value = appPreferences.get(AppPreferences.BIG_OR_SMALL_ALPHABET, "small")
         if ("small".equals(big_or_small_alphabet_value)) {
-            number_or_alphabet.check(R.id.small_alphabet)
+            number_or_letter.check(R.id.small_alphabet)
         } else if ("big".equals(big_or_small_alphabet_value)) {
-            number_or_alphabet.check(R.id.big_alphabet)
+            number_or_letter.check(R.id.big_alphabet)
         }
 
-        big_or_small_alphabet.setOnCheckedChangeListener(object: RadioGroup.OnCheckedChangeListener {
+        big_or_small_letter.setOnCheckedChangeListener(object: RadioGroup.OnCheckedChangeListener {
             override fun onCheckedChanged(p0: RadioGroup?, p1: Int) {
                 if (p1 == R.id.small_alphabet) {
                     appPreferences.save(AppPreferences.BIG_OR_SMALL_ALPHABET, "small")
@@ -75,5 +76,55 @@ class SettingFragment : Fragment() {
         })
 
         return root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(Constants.TAG, "onCreate: ")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(Constants.TAG, "onStart: ")
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(Constants.TAG, "onResume: ")
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        Log.d(Constants.TAG, "onAttach: ")
+    }
+
+    override fun onDetach() {
+
+        Log.d(Constants.TAG, "onDetach: ")
+        super.onDetach()
+    }
+
+    override fun onPause() {
+
+        Log.d(Constants.TAG, "onPause: ")
+        super.onPause()
+    }
+
+    override fun onStop() {
+
+        Log.d(Constants.TAG, "onStop: ")
+        super.onStop()
+    }
+
+    override fun onDestroyView() {
+
+        Log.d(Constants.TAG, "onDestroyView: ")
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+
+        Log.d(Constants.TAG, "onDestroy: ")
+        super.onDestroy()
     }
 }

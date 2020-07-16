@@ -7,12 +7,12 @@
     tools:context=".ui.setting.SettingFragment">
 
     <RadioGroup
-        android:id="@+id/number_or_alphabet"
+        android:id="@+id/number_or_letter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        app:layout_constraintBottom_toTopOf="@+id/big_or_small_alphabet"
+        app:layout_constraintBottom_toTopOf="@+id/big_or_small_letter"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
@@ -32,7 +32,7 @@
     </RadioGroup>
 
     <RadioGroup
-        android:id="@+id/big_or_small_alphabet"
+        android:id="@+id/big_or_small_letter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="30dp"
