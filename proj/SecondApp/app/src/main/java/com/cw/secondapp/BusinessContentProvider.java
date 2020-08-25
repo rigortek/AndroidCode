@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,6 +22,11 @@ public class BusinessContentProvider extends ContentProvider {
 //            mContext = null;
 //        }
 //        mContext.getPackageName();
+        try {
+            throw new NullPointerException("onCreate fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return false;
     }
@@ -28,7 +34,7 @@ public class BusinessContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        getCallingPackage();
+//        getCallingPackage();
         return null;
     }
 
@@ -57,6 +63,11 @@ public class BusinessContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) {
+        try {
+            throw new NullPointerException("call fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return super.call(method, arg, extras);
     }
 }
