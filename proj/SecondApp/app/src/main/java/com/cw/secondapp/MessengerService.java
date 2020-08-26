@@ -32,9 +32,11 @@ public class MessengerService extends Service {
 //            String callingApp = getPackageManager().getNameForUid(Binder.getCallingUid());
             String [] pkgList = getPackageNames(getApplicationContext(), Binder.getCallingPid());
 
-            for (String cur:
-                 pkgList) {
-                Log.d(TAG, "---------- basicTypes: call from client " + cur);
+            if (null != pkgList) {
+                for (String cur :
+                        pkgList) {
+                    Log.d(TAG, "---------- basicTypes: call from client " + cur);
+                }
             }
 
             return "OK";

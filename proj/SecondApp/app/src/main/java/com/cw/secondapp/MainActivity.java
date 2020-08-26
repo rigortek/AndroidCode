@@ -17,6 +17,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        getContentResolver().call(Uri.parse("content://provider.authorities"), "invoke", null, null);
+//        getContentResolver().call(Uri.parse("content://businessprovider.authorities"), "invoke", null, null);
     }
 }

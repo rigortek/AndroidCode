@@ -3,6 +3,7 @@
     package="com.cw.firstapp">
 
 <!--    <uses-permission android:name="com.cw.permission.TEST"></uses-permission>-->
+    <uses-permission android:name="com.cw.secondapp.permission.BINDSERVICE"></uses-permission>
 
     <application
         android:allowBackup="true"

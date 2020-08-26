@@ -47,6 +47,7 @@ public class BusinessContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
+
         return null;
     }
 
@@ -68,6 +69,9 @@ public class BusinessContentProvider extends ContentProvider {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        getContext().getContentResolver().notifyChange(Uri.parse("content://businessprovider.authorities/descendant"), null);
+
         return super.call(method, arg, extras);
     }
 }

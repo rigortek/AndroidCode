@@ -51,7 +51,7 @@ public class MediaTestActivity extends AppCompatActivity
             Log.d(TAG, "onResume: " + mCurPositin);
         }
 
-        getContentResolver().call(Uri.parse("content://provider.authorities"), "invoke", null, null);
+//        getContentResolver().call(Uri.parse("content://businessprovider.authorities"), "invoke", null, null);
     }
 
     @Override

@@ -50,7 +50,7 @@
         </receiver>
         
         <provider
-            android:authorities="provider.authorities"
+            android:authorities="businessprovider.authorities"
             android:name=".BusinessContentProvider"
             android:exported="true">
         </provider>

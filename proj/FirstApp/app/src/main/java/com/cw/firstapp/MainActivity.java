@@ -6,6 +6,7 @@ import android.app.Service;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -16,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 
 import com.cw.secondapp.IMessengerService;
+
+import java.util.List;
 
 
 /*
@@ -61,7 +64,41 @@ public class MainActivity extends AppCompatActivity {
         mBtAccessContentProvider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getContentResolver().call(Uri.parse("content://provider.authorities"), "onClick", null, null);
+
+                List<String> segmentList = Uri.parse("content://businessprovider.authorities/descendant").getPathSegments();
+
+                getContentResolver().registerContentObserver(Uri.parse("content://businessprovider.authorities/descendant"), true, new ContentObserver(null) {
+                    @Override
+                    public boolean deliverSelfNotifications() {
+                        return super.deliverSelfNotifications();
+                    }
+
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        super.onChange(selfChange);
+                        Log.d(TAG, "onChange: " + selfChange);
+
+                        try {
+                            throw new NullPointerException("onChange fake exception for print callstack");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onChange(boolean selfChange, Uri uri) {
+                        super.onChange(selfChange, uri);
+                        Log.d(TAG, "onChange: " + selfChange + ", " + uri.toString());
+
+                        try {
+                            throw new NullPointerException("onChange fake exception for print callstack");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+                getContentResolver().call(Uri.parse("content://businessprovider.authorities"), "onClick", null, null);
             }
         });
     }
