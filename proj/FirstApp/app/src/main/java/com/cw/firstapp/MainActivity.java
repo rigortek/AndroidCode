@@ -4,12 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -35,17 +38,53 @@ public class MainActivity extends AppCompatActivity {
     public static final String TAG = "jcw";
     public static final String BROADCAST_ACTION_TEST = "com.cw.firstapp.action.TEST";
     public static final String BROADCAST_RECEIVE_RPERMISSION_TEST = "com.cw.firstapp.permission.TEST";
+    public static final String PROVIDER_AUTHORITIES = "content://businessprovider.authorities";
 
     Button mBtSendBroadcast;
     Button mBtAccessContentProvider;
+    Button mBtMiltiCallProvider;
 
     IMessengerService mIMessengerService;
+
+    Context context;
+    Handler handler;
+
+    private static class OufengContentObserver extends ContentObserver {
+
+        /**
+         * Creates a content observer.
+         *
+         * @param handler The handler to run {@link #onChange} on, or null if none.
+         */
+        public OufengContentObserver(Context context, Handler handler) {
+            super(handler);
+            this.context = context;
+        }
+
+        @Override
+        public void onChange(boolean selfChange, Uri uri) {
+            super.onChange(selfChange, uri);
+
+            Log.d(TAG, "onChange: " + selfChange + ", " + uri.toString());
+
+            try {
+                throw new NullPointerException("onChange fake exception for print callstack");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.d(TAG, "onChange: in MainLooper " + (Thread.currentThread() == Looper.getMainLooper().getThread()));
+        }
+
+        private Context context;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        handler = new Handler(getApplication().getMainLooper());
 
         mBtSendBroadcast = (Button)findViewById(R.id.bt_sendbroadcast);
         mBtSendBroadcast.setOnClickListener(new View.OnClickListener() {
@@ -67,38 +106,46 @@ public class MainActivity extends AppCompatActivity {
 
                 List<String> segmentList = Uri.parse("content://businessprovider.authorities/descendant").getPathSegments();
 
-                getContentResolver().registerContentObserver(Uri.parse("content://businessprovider.authorities/descendant"), true, new ContentObserver(null) {
+                getContentResolver().registerContentObserver(Uri.parse("content://businessprovider.authorities/descendant"), true,
+                        new OufengContentObserver(getApplicationContext(), null));
+//                getContentResolver().registerContentObserver(Uri.parse("content://businessprovider.authorities/descendant"), true,
+//                        new OufengContentObserver(getApplicationContext(), handler));
+
+                getContentResolver().call(Uri.parse(PROVIDER_AUTHORITIES), "onClick", null, null);
+            }
+        });
+
+        mBtMiltiCallProvider = (Button)findViewById(R.id.bt_multi_call_cp);
+        mBtMiltiCallProvider.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "onClick: client start call");
+                // first thread
+                Thread firstThread = new Thread(new Runnable() {
                     @Override
-                    public boolean deliverSelfNotifications() {
-                        return super.deliverSelfNotifications();
-                    }
-
-                    @Override
-                    public void onChange(boolean selfChange) {
-                        super.onChange(selfChange);
-                        Log.d(TAG, "onChange: " + selfChange);
-
-                        try {
-                            throw new NullPointerException("onChange fake exception for print callstack");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                    @Override
-                    public void onChange(boolean selfChange, Uri uri) {
-                        super.onChange(selfChange, uri);
-                        Log.d(TAG, "onChange: " + selfChange + ", " + uri.toString());
-
-                        try {
-                            throw new NullPointerException("onChange fake exception for print callstack");
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                    public void run() {
+                        for (int i = 0; i < 10; i++) {
+                            getContentResolver().call(Uri.parse(PROVIDER_AUTHORITIES), "Thread 1 call index: " + i, null, null);
                         }
                     }
                 });
+                firstThread.setName("first thread");
+                firstThread.start();
 
-                getContentResolver().call(Uri.parse("content://businessprovider.authorities"), "onClick", null, null);
+                // second thread
+                Thread secondThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        for (int i = 0; i < 10; i++) {
+                            getContentResolver().call(Uri.parse(PROVIDER_AUTHORITIES), "Thread 2 call index: " + i, null, null);
+                        }
+                    }
+                });
+                secondThread.setName("second thread");
+                secondThread.start();
+
+                Log.d(TAG, "onClick: client end call");
             }
         });
     }
