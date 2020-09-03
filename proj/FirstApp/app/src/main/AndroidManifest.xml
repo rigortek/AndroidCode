@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cw.firstapp">
 
-<!--    <uses-permission android:name="com.cw.permission.TEST"></uses-permission>-->
-    <uses-permission android:name="com.cw.secondapp.permission.BINDSERVICE"></uses-permission>
+    <!-- <uses-permission android:name="com.cw.permission.TEST"></uses-permission> -->
+    <uses-permission android:name="com.cw.secondapp.permission.BINDSERVICE" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity
+            android:name=".NextActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_next"
+            android:theme="@style/FullscreenTheme"></activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

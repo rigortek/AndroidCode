@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     Button mBtSendBroadcast;
     Button mBtAccessContentProvider;
     Button mBtMiltiCallProvider;
+    Button mBtToNextActivity;
 
     IMessengerService mIMessengerService;
 
@@ -148,6 +149,30 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "onClick: client end call");
             }
         });
+
+        mBtToNextActivity = (Button) findViewById(R.id.bt_to_next_activity);
+        mBtToNextActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent();
+                i.setClass(getApplicationContext(), NextActivity.class);
+                i.setAction(Intent.ACTION_MAIN);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
+            }
+        });
+    }
+
+    @Override
+    protected void onStop() {
+        // verify onStop call stack
+        try {
+            throw new NullPointerException("call fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        super.onStop();
     }
 
     @Override
