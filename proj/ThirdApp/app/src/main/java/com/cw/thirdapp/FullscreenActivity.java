@@ -12,6 +12,42 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+//    W/System.err( 4639): java.lang.NullPointerException: FullscreenActivity call fake exception for print callstack
+//    W/System.err( 4639): 	at com.cw.thirdapp.FullscreenActivity.onPause(FullscreenActivity.java:221)
+//    W/System.err( 4639): 	at android.app.Activity.performPause(Activity.java:6101)
+//    W/System.err( 4639): 	at android.app.Instrumentation.callActivityOnPause(Instrumentation.java:1310)
+//    W/System.err( 4639): 	at android.app.ActivityThread.performPauseActivity(ActivityThread.java:3246)
+//    W/System.err( 4639): 	at android.app.ActivityThread.performPauseActivity(ActivityThread.java:3219)
+//    W/System.err( 4639): 	at android.app.ActivityThread.handlePauseActivity(ActivityThread.java:3194)
+//    W/System.err( 4639): 	at android.app.ActivityThread.access$1000(ActivityThread.java:151)
+//    W/System.err( 4639): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1314)
+//    W/System.err( 4639): 	at android.os.Handler.dispatchMessage(Handler.java:102)
+//    W/System.err( 4639): 	at android.os.Looper.loop(Looper.java:135)
+//    W/System.err( 4639): 	at android.app.ActivityThread.main(ActivityThread.java:5254)
+//    W/System.err( 4639): 	at java.lang.reflect.Method.invoke(Native Method)
+//    W/System.err( 4639): 	at java.lang.reflect.Method.invoke(Method.java:372)
+//    W/System.err( 4639): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:903)
+//    W/System.err( 4639): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:698)
+//    I/ActivityManager( 2632): Killing 3731:com.android.development/u0a28 (adj 15): empty for 1801s
+//    W/libprocessgroup( 2632): failed to open /acct/uid_10028/pid_3731/cgroup.procs: No such file or directory
+//    D/jcw     ( 4639): onCreate: NextActivity
+//    W/System.err( 4639): java.lang.NullPointerException: NextActivity call fake exception for print callstack
+//    W/System.err( 4639): 	at com.cw.thirdapp.NextActivity.onCreate(NextActivity.java:107)
+//    W/System.err( 4639): 	at android.app.Activity.performCreate(Activity.java:5990)
+//    W/System.err( 4639): 	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1106)
+//    W/System.err( 4639): 	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:2278)
+//    W/System.err( 4639): 	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:2387)
+//    W/System.err( 4639): 	at android.app.ActivityThread.access$800(ActivityThread.java:151)
+//    W/System.err( 4639): 	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1303)
+//    W/System.err( 4639): 	at android.os.Handler.dispatchMessage(Handler.java:102)
+//    W/System.err( 4639): 	at android.os.Looper.loop(Looper.java:135)
+//    W/System.err( 4639): 	at android.app.ActivityThread.main(ActivityThread.java:5254)
+//    W/System.err( 4639): 	at java.lang.reflect.Method.invoke(Native Method)
+//    W/System.err( 4639): 	at java.lang.reflect.Method.invoke(Method.java:372)
+//    W/System.err( 4639): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:903)
+//    W/System.err( 4639): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:698)
+
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -193,6 +229,12 @@ public class FullscreenActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         super.onPause();
+
+        try {
+            Thread.sleep(4000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

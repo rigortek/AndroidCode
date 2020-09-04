@@ -101,6 +101,14 @@ public class NextActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.d(TAG, "onCreate: NextActivity");
+        // verify onResume call stack
+        try {
+            throw new NullPointerException("NextActivity call fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         setContentView(R.layout.activity_next);
 
         mVisible = true;
@@ -174,16 +182,14 @@ public class NextActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: NextActivity");
+    }
+
+    @Override
     protected void onResume() {
         Log.d(TAG, "onResume: NextActivity");
-
-        // verify onResume call stack
-        try {
-            throw new NullPointerException("NextActivity call fake exception for print callstack");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         super.onResume();
     }
 }
