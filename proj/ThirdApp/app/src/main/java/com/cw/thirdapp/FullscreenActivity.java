@@ -230,11 +230,11 @@ public class FullscreenActivity extends AppCompatActivity {
         }
         super.onPause();
 
-        try {
-            Thread.sleep(4000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(4000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     @Override
