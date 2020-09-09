@@ -45,9 +45,8 @@ public class MyReadWriteData {
     public Object getCache2(String key) {
         try {
             readWriteLock.readLock().lock();
-
             System.out.printf(Thread.currentThread().getName() + " Entry readCache\n");
-            TimeUnit.MILLISECONDS.sleep(50);
+            TimeUnit.MILLISECONDS.sleep(100);
             return cache.get(key);
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -65,7 +64,7 @@ public class MyReadWriteData {
             System.out.printf(Thread.currentThread().getName() + " Entry writeCache\n");
             TimeUnit.MILLISECONDS.sleep(50);
             cache.put(key, value);
-            System.out.printf(Thread.currentThread().getName() + " Leave getCache\n");
+            System.out.printf(Thread.currentThread().getName() + " Leave writeCache\n");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
