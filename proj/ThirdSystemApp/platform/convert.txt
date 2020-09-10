@@ -1,0 +1,15 @@
+/******************************************************************************************************************************************/
+// convert platform.pk8 & platform.x509.pem to platform.jks step:
+
+1) openssl pkcs8 -in platform.pk8 -inform DER -outform PEM -out platform.priv.pem -nocrypt
+2) openssl pkcs12 -export -in platform.x509.pem -inkey platform.priv.pem -out platform.pk12 -name android
+3) keytool -importkeystore -destkeystore platform.jks -srckeystore platform.pk12 -srcstoretype PKCS12 -srcstorepass android -alias android
+
+step 2 & 3 password we set it as: android
+
+/******************************************************************************************************************************************/
+// command sign apk by platform.pk8 & platform.x509.pem, exec in project root dir.
+
+java -jar ~/bin/signapk.jar platform/platform.x509.pem platform/platform.pk8  app/build/outputs/apk/debug/app-debug.apk app/build/outputs/apk/debug/app-debug-signed.apk
+
+

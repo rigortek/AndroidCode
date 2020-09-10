@@ -209,6 +209,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        Log.d(TAG, "Action: " + event.getAction() + ", onKeyDown keyCode: " + keyCode);
+        try {
+            throw new NullPointerException("fake NullPointerException");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         return super.onKeyDown(keyCode, event);
     }

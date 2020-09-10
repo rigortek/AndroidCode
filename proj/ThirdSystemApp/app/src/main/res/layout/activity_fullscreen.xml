@@ -28,6 +28,14 @@
         android:text="Start Next Activity">
     </Button>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/injectKeyEvent"
+        android:textAllCaps="false"
+        android:text="Trigger app injectKeyEvent">
+    </Button>
+
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->

@@ -1,4 +1,4 @@
-package com.cw.thirdapp;
+package com.cw.thirdsystemapp;
 
 import android.annotation.SuppressLint;
 
@@ -8,9 +8,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.util.Log;
+import android.view.InputDevice;
+import android.view.KeyCharacterMap;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+
+import org.xml.sax.InputSource;
 
 //    W/System.err( 4639): java.lang.NullPointerException: FullscreenActivity call fake exception for print callstack
 //    W/System.err( 4639): 	at com.cw.thirdapp.FullscreenActivity.onPause(FullscreenActivity.java:221)
@@ -165,6 +171,46 @@ public class FullscreenActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        findViewById(R.id.injectKeyEvent).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                sendKeyEvent(KeyEvent.KEYCODE_0);
+            }
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        try {
+            throw new NullPointerException("FullscreenActivity call fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        try {
+            throw new NullPointerException("FullscreenActivity call fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return super.onKeyUp(keyCode, event);
+    }
+
+    private void sendKeyEvent(int keyCode) {
+        InputHelper inputHelper = new InputHelper();
+        long now = SystemClock.uptimeMillis();
+
+        inputHelper.injectKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_DOWN, keyCode, 0, 0,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0, 0, InputDevice.SOURCE_KEYBOARD));
+
+        inputHelper.injectKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_UP, keyCode, 0, 0,
+                KeyCharacterMap.VIRTUAL_KEYBOARD, 0, 0, InputDevice.SOURCE_KEYBOARD));
     }
 
     @Override
@@ -223,11 +269,11 @@ public class FullscreenActivity extends AppCompatActivity {
     protected void onPause() {
         Log.d(TAG, "onPause: FullscreenActivity");
         // verify onPause call stack
-        try {
-            throw new NullPointerException("FullscreenActivity call fake exception for print callstack");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            throw new NullPointerException("FullscreenActivity call fake exception for print callstack");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         super.onPause();
 
 //        try {
@@ -241,11 +287,11 @@ public class FullscreenActivity extends AppCompatActivity {
     protected void onStop() {
         Log.d(TAG, "onStop: FullscreenActivity");
         // verify onStop call stack
-        try {
-            throw new NullPointerException("FullscreenActivity call fake exception for print callstack");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            throw new NullPointerException("FullscreenActivity call fake exception for print callstack");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         super.onStop();
     }
 }

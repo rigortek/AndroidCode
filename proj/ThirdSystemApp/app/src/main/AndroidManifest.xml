@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.cw.thirdapp">
+    package="com.cw.thirdsystemapp">
+
+    <uses-permission android:name="android.permission.INJECT_EVENTS"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -10,12 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".NextActivity"
+            android:name="com.cw.thirdsystemapp.NextActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_next"
             android:theme="@style/FullscreenTheme"></activity>
         <activity
-            android:name=".FullscreenActivity"
+            android:name="com.cw.thirdsystemapp.FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/FullscreenTheme">
