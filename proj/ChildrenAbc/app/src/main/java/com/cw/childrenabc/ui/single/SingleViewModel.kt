@@ -22,6 +22,8 @@ class SingleViewModel : ViewModel() {
     lateinit var usedNumber: ArrayList<Int>
 
     var nextPicture: Int = 0
+    var testTotalCount = 0
+    var testRightCount = 0
 
     init {
         fullBigLetterList = arrayListOf(

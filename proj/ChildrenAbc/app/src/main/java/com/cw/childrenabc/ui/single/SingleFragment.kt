@@ -13,12 +13,13 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.cw.childrenabc.Constants
 import com.cw.childrenabc.R
+import com.cw.childrenabc.ToastUtil
 
 class SingleFragment : Fragment() {
 
     private lateinit var singleViewModel: SingleViewModel
 
-    private lateinit var textViewCurCharactor: TextView
+//    private lateinit var textViewCurCharactor: TextView
     private lateinit var radioButtonWrong: RadioButton
     private lateinit var radioButtonRight: RadioButton
 
@@ -35,8 +36,25 @@ class SingleFragment : Fragment() {
 //            textViewCurCharactor.text = it
 //        })
 
+
         radioButtonWrong = root.findViewById(R.id.check_wrong)
+        radioButtonWrong.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                singleViewModel.testTotalCount += 1
+
+                activity?.let { ToastUtil.showLong(it, "噢噢，选错了，请加油") }
+            }
+
+        })
         radioButtonRight = root.findViewById(R.id.check_right)
+        radioButtonRight.setOnClickListener(object: View.OnClickListener {
+            override fun onClick(v: View?) {
+                singleViewModel.testRightCount += 1
+                singleViewModel.testTotalCount += 1
+
+                activity?.let { ToastUtil.showLong(it, "哈哈，选对了，你真棒") }
+            }
+        })
 
         return root
     }

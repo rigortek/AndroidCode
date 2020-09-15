@@ -7,13 +7,13 @@
 
     <fragment
         android:id="@+id/navigation_single_examine"
-        android:name="com.cw.childrenabc.ui.multi.MultiFragment"
+        android:name="com.cw.childrenabc.ui.single.SingleFragment"
         android:label="@string/title_single_examine"
         tools:layout="@layout/fragment_multi" />
 
     <fragment
         android:id="@+id/navigation_multi_examine"
-        android:name="com.cw.childrenabc.ui.single.SingleFragment"
+        android:name="com.cw.childrenabc.ui.multi.MultiFragment"
         android:label="@string/title_multi_examine"
         tools:layout="@layout/fragment_single" />
 
