@@ -49,6 +49,11 @@ class SingleFragment : Fragment() {
         radioButtonWrong = root.findViewById(R.id.check_wrong)
         radioButtonWrong.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View?) {
+                if (-1 == curIndex) {
+                    activity?.let { ToastUtil.showShort(it, "你的得了" + 100 * singleViewModel.testRightCount / singleViewModel.totalTestCount()  + "分") }
+                    return
+                }
+
                 if (singleViewModel.isIndexRecorded(curIndex)) {
                     curIndex = singleViewModel.generateNextIndex()
                     if (-1 == curIndex) {
@@ -78,6 +83,7 @@ class SingleFragment : Fragment() {
         radioButtonRight.setOnClickListener(object: View.OnClickListener {
             override fun onClick(v: View?) {
                 if (-1 == curIndex) {
+                    activity?.let { ToastUtil.showShort(it, "你的得了" + 100 * singleViewModel.testRightCount / singleViewModel.totalTestCount()  + "分") }
                     return
                 }
 
