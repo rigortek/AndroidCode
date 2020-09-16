@@ -8,8 +8,8 @@ import android.text.TextUtils;
 
 public class AppPreferences {
 
-    public static final String NUMBER_OR_ALPHABET = "number_alphabet";
-    public static final String BIG_OR_SMALL_ALPHABET = "big_small_alphabet";
+    public static final String NUMBER_OR_LETTER = "number_alphabet";
+    public static final String BIG_OR_SMALL_LETTER = "big_small_alphabet";
 
     private Context context;
 
@@ -23,11 +23,15 @@ public class AppPreferences {
         }
 
         SharedPreferences sp = getSettingsPreference();
-        if (!value.equals(sp.getString(name, value))) {
+        if (!contains(name) || !value.equals(sp.getString(name, value))) {
             Editor editor = sp.edit();
             editor.putString(name, value);
             editor.commit();
         }
+    }
+
+    public boolean contains(String name) {
+        return getSettingsPreference().contains(name);
     }
 
     public String get(String name, String defValue) {

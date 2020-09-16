@@ -17,7 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <RadioButton
-            android:id="@+id/alphabet"
+            android:id="@+id/letter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="字母"
@@ -41,14 +41,14 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <RadioButton
-            android:id="@+id/big_alphabet"
+            android:id="@+id/big_letter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="大写字母"
             android:textSize="30sp"/>
 
         <RadioButton
-            android:id="@+id/small_alphabet"
+            android:id="@+id/small_letter"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="小写字母"

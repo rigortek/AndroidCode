@@ -6,13 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".ui.single.SingleFragment">
 
+
+    <ImageView
+        android:id="@+id/cur_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/white"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+    </ImageView>
+
     <RadioGroup
         android:id="@+id/right_or_wrong"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="80dp"
         app:layout_constraintBottom_toBottomOf="parent" >
 
         <RadioButton
