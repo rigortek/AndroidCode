@@ -2,6 +2,8 @@ package com.cw;
 
 // 使用Semaphore来处理10个人抢5个厕所坑位的行为
 
+// https://github.com/XU-ZHOU/Java
+
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
