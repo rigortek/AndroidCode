@@ -216,6 +216,13 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent intent = new Intent();
+            intent.setAction("com.cw.firstapp.action.SELFDEFINE");
+//            intent.addCategory("com.cw.firstapp.intent.category.SELFDEFINE");
+            startActivity(intent);
+        }
+
         return super.onKeyDown(keyCode, event);
     }
 }

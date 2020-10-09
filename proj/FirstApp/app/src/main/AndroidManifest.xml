@@ -12,23 +12,44 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".ChooseActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="@string/title_activity_choose"
+            android:theme="@style/FullscreenTheme">
+
+            <intent-filter>
+                <action android:name="com.cw.firstapp.action.SELFDEFINE" />
+<!--                <category android:name="com.cw.firstapp.intent.category.SELFDEFINE" />-->
+
+                <category android:name="android.intent.category.DEFAULT" ></category>
+            </intent-filter>
+
+        </activity>
+
+
         <activity
             android:name=".NextActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_next"
             android:theme="@style/FullscreenTheme">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <activity android:name=".MainActivity">
-<!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
-<!--            </intent-filter>-->
+                <action android:name="com.cw.firstapp.action.SELFDEFINE" />
+<!--                <category android:name="com.cw.firstapp.intent.category.SELFDEFINE" />-->
+
+                <category android:name="android.intent.category.DEFAULT" ></category>
+            </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
