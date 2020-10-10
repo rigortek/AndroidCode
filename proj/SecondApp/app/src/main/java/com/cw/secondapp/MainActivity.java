@@ -24,7 +24,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
-        intent.setClassName(getPackageName(), SecondActivity.class.getName());
+//        intent.setClassName(getPackageName(), SecondActivity.class.getName());
+        intent.setClassName("com.cw.thirdsystemapp", "com.cw.thirdsystemapp.FullscreenActivity");
         // 方式一
         startActivity(intent);
 //        // 方式二

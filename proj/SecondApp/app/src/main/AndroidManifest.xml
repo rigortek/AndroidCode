@@ -43,6 +43,18 @@
             android:label="@string/title_activity_second"
             android:theme="@style/FullscreenTheme">
 
+            <intent-filter>
+                <action android:name="com.cw.secondapp.action.one" />
+                <action android:name="com.cw.secondapp.action.two" />
+                <action android:name="com.cw.secondapp.action.three" />
+
+                <category android:name="com.cw.secondapp.category.one" />
+                <category android:name="com.cw.secondapp.category.two" />
+                <category android:name="com.cw.secondapp.category.three" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
         </activity>
 
         <activity
