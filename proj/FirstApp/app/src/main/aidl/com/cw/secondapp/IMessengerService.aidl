@@ -9,4 +9,7 @@ interface IMessengerService {
      * and return values in AIDL.
      */
     String basicTypes(String aString);
+
+    void transferBitMap(in Bitmap bitmap);
+    void transferBitMapByBundle(in Bundle bundle);
 }

@@ -5,7 +5,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
@@ -40,6 +42,16 @@ public class MessengerService extends Service {
             }
 
             return "OK";
+        }
+
+        @Override
+        public void transferBitMap(Bitmap bitmap) throws RemoteException {
+            Log.d(TAG, "---------- transferBitMap ----------, size: " + (null != bitmap ? bitmap.getByteCount() : 0));
+        }
+
+        @Override
+        public void transferBitMapByBundle(Bundle bundle) throws RemoteException {
+            Log.d(TAG, "---------- transferBitMapByBundle ----------");
         }
     }
 

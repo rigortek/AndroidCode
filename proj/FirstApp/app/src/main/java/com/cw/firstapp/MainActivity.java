@@ -1,5 +1,6 @@
 package com.cw.firstapp;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Service;
@@ -8,7 +9,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.ContentObserver;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -187,6 +191,7 @@ public class MainActivity extends AppCompatActivity {
         service.setClassName("com.cw.secondapp", "com.cw.secondapp.MessengerService");
         startService(service);
         bindService(service, new ServiceConnection() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 mIMessengerService = IMessengerService.Stub.asInterface(service);
@@ -194,6 +199,15 @@ public class MainActivity extends AppCompatActivity {
 
                 try {
                     mIMessengerService.basicTypes("hi, me is first app");
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
+                    int size = bitmap.getByteCount();
+                    Log.d(TAG, "---------- onServiceConnected, bitmap size: " + size);
+                    mIMessengerService.transferBitMap(bitmap);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }

@@ -6,6 +6,8 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -178,6 +180,12 @@ public class FullscreenActivity extends AppCompatActivity {
                 sendKeyEvent(KeyEvent.KEYCODE_0);
             }
         });
+
+        Intent intent = getIntent();
+        Bitmap bitmap = intent != null ? (Bitmap)intent.getParcelableExtra("bitmap") : null;
+        if (null != bitmap) {
+            findViewById(R.id.pass_image).setBackground(new BitmapDrawable(getResources(), bitmap));
+        }
     }
 
     @Override
