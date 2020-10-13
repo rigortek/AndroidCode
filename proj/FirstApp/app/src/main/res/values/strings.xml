@@ -2,8 +2,8 @@
     <string name="app_name">FirstApp</string>
     <string name="send_broadcast"></string>
     <string name="call_contentprovider"></string>
-    <string name="title_activity_next">FullscreenActivity</string>
+    <string name="title_activity_next">NextActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_choose">FullscreenActivity</string>
+    <string name="title_activity_choose">ChooseActivity</string>
 </resources>

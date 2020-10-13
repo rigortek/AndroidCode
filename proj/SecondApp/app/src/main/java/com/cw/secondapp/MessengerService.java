@@ -46,12 +46,17 @@ public class MessengerService extends Service {
 
         @Override
         public void transferBitMap(Bitmap bitmap) throws RemoteException {
-            Log.d(TAG, "---------- transferBitMap ----------, size: " + (null != bitmap ? bitmap.getByteCount() : 0));
+            Log.d(TAG, "---------- transferBitMap ----------, size(byte): " + (null != bitmap ? bitmap.getByteCount() : 0));
         }
 
         @Override
         public void transferBitMapByBundle(Bundle bundle) throws RemoteException {
             Log.d(TAG, "---------- transferBitMapByBundle ----------");
+        }
+
+        @Override
+        public void transferRawData(byte[] raw) throws RemoteException {
+            Log.d(TAG, "---------- transferRawData ---------- " + (raw != null ? raw.length : 0));
         }
     }
 

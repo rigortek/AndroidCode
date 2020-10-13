@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.os.TransactionTooLargeException;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.Button;
 
 import com.cw.secondapp.IMessengerService;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 
@@ -158,11 +160,15 @@ public class MainActivity extends AppCompatActivity {
         mBtToNextActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent();
-                i.setClass(getApplicationContext(), NextActivity.class);
-                i.setAction(Intent.ACTION_MAIN);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
+//                Intent i = new Intent();
+//                i.setClass(getApplicationContext(), NextActivity.class);
+//                i.setAction(Intent.ACTION_MAIN);
+//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(i);
+
+//                chooseActivity();
+
+                transferBitBitmapFail();
             }
         });
     }
@@ -203,14 +209,51 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+/*
                 try {
+                    // aidl可以直接传递> 1M Bitmap，关键就出在它是使用ashmem，共享内存
+                    // platform/tvos-h/base/ipc/binder/Parcel.cpp
+                    // status_t Parcel::writeBlob(size_t len, WritableBlob* outBlob)
                     Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
-                    int size = bitmap.getByteCount();
-                    Log.d(TAG, "---------- onServiceConnected, bitmap size: " + size);
+                    int size = bitmap.getByteCount();  // 长 ＊ 宽 ＊ 16
+                    Log.d(TAG, "---------- onServiceConnected, bitmap size(KB): " + (float)size / 1024 / 8);
                     mIMessengerService.transferBitMap(bitmap);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+*/
+/*
+                E/JavaBinder( 8707): !!! FAILED BINDER TRANSACTION !!!
+                W/System.err( 8707): android.os.TransactionTooLargeException
+                W/System.err( 8707): 	at android.os.BinderProxy.transactNative(Native Method)
+                W/System.err( 8707): 	at android.os.BinderProxy.transact(Binder.java:504)
+                W/System.err( 8707): 	at com.cw.secondapp.IMessengerService$Stub$Proxy.transferRawData(IMessengerService.java:222)
+                W/System.err( 8707): 	at com.cw.firstapp.MainActivity$5.onServiceConnected(MainActivity.java:227)
+                W/System.err( 8707): 	at android.app.LoadedApk$ServiceDispatcher.doConnected(LoadedApk.java:1259)
+                W/System.err( 8707): 	at android.app.LoadedApk$ServiceDispatcher$RunConnection.run(LoadedApk.java:1276)
+                W/System.err( 8707): 	at android.os.Handler.handleCallback(Handler.java:815)
+                W/System.err( 8707): 	at android.os.Handler.dispatchMessage(Handler.java:104)
+                W/System.err( 8707): 	at android.os.Looper.loop(Looper.java:224)
+                W/System.err( 8707): 	at android.app.ActivityThread.main(ActivityThread.java:5958)
+                W/System.err( 8707): 	at java.lang.reflect.Method.invoke(Native Method)
+                W/System.err( 8707): 	at java.lang.reflect.Method.invoke(Method.java:372)
+                W/System.err( 8707): 	at com.android.internal.os.ZygoteInit$MethodAndArgsCaller.run(ZygoteInit.java:1113)
+                W/System.err( 8707): 	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:879)
+*/
+                // 裸数据 > 1M 是传不过去的，例如byte[]
+                try {
+                    Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
+                    ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                    byte[] bitmapdata = stream.toByteArray();
+                    mIMessengerService.transferRawData(bitmapdata);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
+//                transferBitBitmapFail();
+
+//                transferBitBitmapSuccess();
             }
 
             @Override
@@ -230,13 +273,63 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent = new Intent();
-            intent.setAction("com.cw.firstapp.action.SELFDEFINE");
-//            intent.addCategory("com.cw.firstapp.intent.category.SELFDEFINE");
-            startActivity(intent);
-        }
-
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void chooseActivity() {
+        // 选择Activitiy
+        Intent intent = new Intent();
+        intent.setAction("com.cw.firstapp.action.SELFDEFINE");
+//        intent.addCategory("com.cw.firstapp.intent.category.SELFDEFINE");
+        startActivity(intent);
+    }
+
+    /*
+        case FAILED_TRANSACTION:
+        ALOGE("!!! FAILED BINDER TRANSACTION !!!");
+        // TransactionTooLargeException is a checked exception, only throw from certain methods.
+        // FIXME: Transaction too large is the most common reason for FAILED_TRANSACTION
+        //        but it is not the only one.  The Binder driver can return BR_FAILED_REPLY
+        //        for other reasons also, such as if the transaction is malformed or
+        //        refers to an FD that has been closed.  We should change the driver
+        //        to enable us to distinguish these cases in the future.
+        jniThrowException(env, canThrowRemoteException
+                ? "android/os/TransactionTooLargeException"
+                        : "java/lang/RuntimeException", NULL);
+        break;
+     */
+    // TransactionTooLargeException 文件太大，传不过去
+    private void transferBitBitmapFail() {
+        try {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.addCategory(Intent.CATEGORY_DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
+            intent.putExtra("bitmap", bitmap);
+            intent.setClassName("com.cw.thirdsystemapp", "com.cw.thirdsystemapp.FullscreenActivity");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 借助putBinder可以突破1M限制  @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private void transferBitBitmapSuccess() {
+        try {
+            Intent intent = new Intent();
+            Bundle bundle = new Bundle();
+            bundle.putBinder("bitmap", new ITransferBitmap.Stub() {
+                @Override
+                public Bitmap getBitmap() throws RemoteException {
+                    return BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
+                }
+            });
+            intent.putExtras(bundle);
+            intent.setClassName("com.cw.thirdsystemapp", "com.cw.thirdsystemapp.FullscreenActivity");
+            startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

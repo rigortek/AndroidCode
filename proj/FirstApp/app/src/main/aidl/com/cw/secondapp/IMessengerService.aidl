@@ -12,4 +12,6 @@ interface IMessengerService {
 
     void transferBitMap(in Bitmap bitmap);
     void transferBitMapByBundle(in Bundle bundle);
+
+    void transferRawData(in byte[] raw);
 }

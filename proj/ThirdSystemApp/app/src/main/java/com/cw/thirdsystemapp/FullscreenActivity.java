@@ -8,8 +8,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
+import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.InputDevice;
@@ -17,6 +20,9 @@ import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+
+
+import com.cw.firstapp.ITransferBitmap;
 
 import org.xml.sax.InputSource;
 
@@ -181,10 +187,29 @@ public class FullscreenActivity extends AppCompatActivity {
             }
         });
 
-        Intent intent = getIntent();
-        Bitmap bitmap = intent != null ? (Bitmap)intent.getParcelableExtra("bitmap") : null;
-        if (null != bitmap) {
-            findViewById(R.id.pass_image).setBackground(new BitmapDrawable(getResources(), bitmap));
+        // < 1M， 没有问题，大于1M，不可以
+//        Intent intent = getIntent();
+//        Bitmap bitmap = intent != null ? (Bitmap)intent.getParcelableExtra("bitmap") : null;
+//        if (null != bitmap) {
+//            findViewById(R.id.pass_image).setBackground(new BitmapDrawable(getResources(), bitmap));
+//        }
+
+        // 大于1没问题
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                IBinder iBinder = bundle.getBinder("bitmap");
+                ITransferBitmap iTransferBitmap = ITransferBitmap.Stub.asInterface((IBinder)iBinder);
+                Bitmap bitmap = null;
+                try {
+                    bitmap = iTransferBitmap.getBitmap();
+                    if (null != bitmap) {
+                        findViewById(R.id.pass_image).setBackground(new BitmapDrawable(getResources(), bitmap));
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
