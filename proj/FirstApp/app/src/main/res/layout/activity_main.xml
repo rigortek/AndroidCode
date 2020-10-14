@@ -51,4 +51,15 @@
         android:textAllCaps="false"
         android:text="Jump to next activity" />
 
+    <Button
+        android:id="@+id/bt_sendfile_to_other_process"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_to_next_activity"
+        android:textAllCaps="false"
+        android:text="Send file to other process" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

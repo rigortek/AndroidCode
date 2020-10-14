@@ -3,6 +3,8 @@ package com.cw.secondapp;
 
 // Declare any non-default types here with import statements
 
+import com.cw.secondapp.ICallBack;
+
 interface IMessengerService {
     /**
      * Demonstrates some basic types that you can use as parameters
@@ -14,4 +16,6 @@ interface IMessengerService {
     void transferBitMapByBundle(in Bundle bundle);
 
     void transferRawData(in byte[] raw);
+
+    void publish(in ParcelFileDescriptor fd, ICallBack callback);
 }

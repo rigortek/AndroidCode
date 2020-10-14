@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.TransactionTooLargeException;
 import android.util.Log;
@@ -24,9 +25,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
+import com.cw.secondapp.ICallBack;
 import com.cw.secondapp.IMessengerService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -50,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
     Button mBtAccessContentProvider;
     Button mBtMiltiCallProvider;
     Button mBtToNextActivity;
+    Button mBtSendFileToOtherProcess;
+
+    ParcelFileDescriptor[] mFds;
 
     IMessengerService mIMessengerService;
 
@@ -171,6 +177,40 @@ public class MainActivity extends AppCompatActivity {
                 transferBitBitmapFail();
             }
         });
+
+        createPipe();
+
+        mBtSendFileToOtherProcess = (Button) findViewById(R.id.bt_sendfile_to_other_process);
+        mBtSendFileToOtherProcess.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    if (null != mIMessengerService) {
+                        mIMessengerService.publish(mFds[0], new ICallBack() {
+                            @Override
+                            public void onReceive(String aString) throws RemoteException {
+
+                            }
+
+                            @Override
+                            public IBinder asBinder() {
+                                return null;
+                            }
+                        });
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void createPipe() {
+        try {
+            mFds = ParcelFileDescriptor.createPipe();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
