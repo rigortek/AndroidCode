@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -20,6 +21,10 @@ public class MessengerService extends Service {
     public static final String TAG = "jcw";
 
     StubImpl mStubImpl;
+
+    ParcelFileDescriptor mParcelFileDescriptor;
+    ICallBack mCallBack;
+
 
     @Nullable
     @Override
@@ -57,6 +62,16 @@ public class MessengerService extends Service {
         @Override
         public void transferRawData(byte[] raw) throws RemoteException {
             Log.d(TAG, "---------- transferRawData ---------- " + (raw != null ? raw.length : 0));
+        }
+
+        @Override
+        public void register(ParcelFileDescriptor fd, ICallBack callback) throws RemoteException {
+            mParcelFileDescriptor = fd;
+            mCallBack = callback;
+
+//            IOUtils.setBlocking(fd, false);
+
+            Log.d(TAG, "---------- register ---------- fd: " + fd + ", callback: " + callback);
         }
     }
 

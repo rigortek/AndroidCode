@@ -17,5 +17,5 @@ interface IMessengerService {
 
     void transferRawData(in byte[] raw);
 
-    void publish(in ParcelFileDescriptor fd, ICallBack callback);
+    void register(in ParcelFileDescriptor fd, ICallBack callback);
 }

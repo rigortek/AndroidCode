@@ -24,14 +24,17 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.cw.secondapp.ICallBack;
 import com.cw.secondapp.IMessengerService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+//import libcore.io.IoUtils;
 
 /*
 指定广播接收者权限,如果接收者无权限提示错误
@@ -186,10 +189,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     if (null != mIMessengerService) {
-                        mIMessengerService.publish(mFds[0], new ICallBack() {
+                        mIMessengerService.register(mFds[0], new ICallBack() {
                             @Override
                             public void onReceive(String aString) throws RemoteException {
-
+                                Toast.makeText(getApplicationContext(), "onReceive: " + aString, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -197,7 +200,11 @@ public class MainActivity extends AppCompatActivity {
                                 return null;
                             }
                         });
+
+                        // write data to server by pipe
+                        writePipe();
                     }
+
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
@@ -208,6 +215,21 @@ public class MainActivity extends AppCompatActivity {
     private void createPipe() {
         try {
             mFds = ParcelFileDescriptor.createPipe();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void writePipe() {  // write data > 1MB
+        try {
+            ParcelFileDescriptor.AutoCloseOutputStream output = new ParcelFileDescriptor.AutoCloseOutputStream(mFds[1]);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] bitmapdata = stream.toByteArray();
+            output.write(bitmapdata);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
