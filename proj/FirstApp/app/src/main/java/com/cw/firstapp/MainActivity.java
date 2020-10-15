@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     ParcelFileDescriptor[] mFds;
 
     IMessengerService mIMessengerService;
+    boolean mRegisteCallbacked;
 
     Context context;
     Handler handler;
@@ -189,18 +190,25 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     if (null != mIMessengerService) {
-                        mIMessengerService.register(mFds[0], new ICallBack() {
-                            @Override
-                            public void onReceive(String aString) throws RemoteException {
-                                Toast.makeText(getApplicationContext(), "onReceive: " + aString, Toast.LENGTH_SHORT).show();
-                            }
+                        if (!mRegisteCallbacked) {
+                            ICallBack iCallBack = new ICallBack.Stub() {
+                                @Override
+                                public void onReceive(String aString) throws RemoteException {
+                                    Log.d(TAG, "onReceive: " + aString);
+                                    final String tmp = aString;
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "onReceive: " + tmp, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
 
-                            @Override
-                            public IBinder asBinder() {
-                                return null;
-                            }
-                        });
+                                }
+                            };
 
+                            mIMessengerService.register(mFds[0], iCallBack);
+                            mRegisteCallbacked = true;
+                        }
                         // write data to server by pipe
                         writePipe();
                     }
@@ -221,13 +229,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void writePipe() {  // write data > 1MB
+        Log.d(TAG, ", writePipe: " + mFds[1] + ", " + mFds[1].getFileDescriptor());
         try {
-            ParcelFileDescriptor.AutoCloseOutputStream output = new ParcelFileDescriptor.AutoCloseOutputStream(mFds[1]);
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] bitmapdata = stream.toByteArray();
-            output.write(bitmapdata);
+//            ParcelFileDescriptor.AutoCloseOutputStream output = new ParcelFileDescriptor.AutoCloseOutputStream(mFds[1]);
+//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
+//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+//            byte[] bitmapdata = stream.toByteArray();
+//            output.write(bitmapdata);
+            String test = "1234567890";
+            output.write(test.getBytes());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -238,11 +249,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         // verify onStop call stack
-        try {
-            throw new NullPointerException("call fake exception for print callstack");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            throw new NullPointerException("call fake exception for print callstack");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         super.onStop();
     }
@@ -257,7 +268,6 @@ public class MainActivity extends AppCompatActivity {
         Intent service = new Intent();
         service.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         service.setClassName("com.cw.secondapp", "com.cw.secondapp.MessengerService");
-        startService(service);
         bindService(service, new ServiceConnection() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
             @Override
@@ -324,16 +334,22 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "---------- onServiceDisconnected: ----------");
             }
         }, Service.BIND_AUTO_CREATE);
+
+        try {
+            startService(service);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Log.d(TAG, "Action: " + event.getAction() + ", onKeyDown keyCode: " + keyCode);
-        try {
-            throw new NullPointerException("fake NullPointerException");
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            throw new NullPointerException("fake NullPointerException");
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//        }
 
         return super.onKeyDown(keyCode, event);
     }
