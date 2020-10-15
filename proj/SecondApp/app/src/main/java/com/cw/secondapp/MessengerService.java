@@ -6,14 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.os.Looper;
 import android.os.MessageQueue;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -21,9 +24,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
-import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -49,41 +53,116 @@ public class MessengerService extends Service {
                 @Override
                 public int onFileDescriptorEvents(@NonNull FileDescriptor fd, int events) {
                     Log.d(TAG, "onFileDescriptorEvents: " + fd + ", " + events);
-                    ParcelFileDescriptor.AutoCloseInputStream reader = new ParcelFileDescriptor.AutoCloseInputStream(mPfd);
-    
-                    StringBuilder sb = new StringBuilder();
-                    final byte[] buffer = new byte[2048];
-                    int size = 0;
-                    do {
-                        try {
-                            size = reader.read(buffer, 0, buffer.length);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        if (size > 0) {
-                            sb.append(new String(buffer, 0, size));
-                        }
-                        Log.d(TAG, "onFileDescriptorEvents: receive content -> " + sb.toString());
-                    } while (size > 0);
+//                    return save2String();
 
-                    try {
-                        if (null != mCallBack) {
-                            String tmp = sb.toString();
-                            if (!TextUtils.isEmpty(tmp)) {
-                                mCallBack.onReceive(tmp);
-                            } else {
-                                Log.w(TAG, "onFileDescriptorEvents: receive nothing");
-                            }
-                        } else {
-                            Log.w(TAG, "onFileDescriptorEvents: callback is null");
-                        }
-                    } catch (RemoteException e) {
-                        e.printStackTrace();
-                    }
-    
-                    return TextUtils.isEmpty(sb.toString()) ? EVENT_ERROR : EVENT_INPUT;
+                    return save2File();
                 }
             };
+        }
+    }
+
+    private int save2String() {
+        ParcelFileDescriptor.AutoCloseInputStream reader = new ParcelFileDescriptor.AutoCloseInputStream(mPfd);
+
+        StringBuilder sb = new StringBuilder();
+        final byte[] buffer = new byte[2048];
+        int size = 0;
+        do {
+            try {
+                size = reader.read(buffer, 0, buffer.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (size > 0) {
+                sb.append(new String(buffer, 0, size));
+            }
+            Log.d(TAG, "onFileDescriptorEvents: receive content -> " + sb.toString());
+        } while (size > 0);
+
+        try {
+            if (null != mCallBack) {
+                String tmp = sb.toString();
+                if (!TextUtils.isEmpty(tmp)) {
+                    mCallBack.onReceive(tmp);
+                } else {
+                    Log.w(TAG, "onFileDescriptorEvents: receive nothing");
+                }
+            } else {
+                Log.w(TAG, "onFileDescriptorEvents: callback is null");
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        return TextUtils.isEmpty(sb.toString()) ? MessageQueue.OnFileDescriptorEventListener.EVENT_ERROR : MessageQueue.OnFileDescriptorEventListener.EVENT_INPUT;
+    }
+
+    private int save2File() {
+        ParcelFileDescriptor.AutoCloseInputStream reader = new ParcelFileDescriptor.AutoCloseInputStream(mPfd);
+
+        ByteArrayOutputStream total = new ByteArrayOutputStream();
+        final byte[] buffer = new byte[2048];
+        int size = 0;
+        do {
+            try {
+                size = reader.read(buffer, 0, buffer.length);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (size > 0) {
+                total.write(buffer, 0, size);
+            }
+        } while (size > 0);
+
+        String path = "";
+        byte[] bitmapdata = total.toByteArray();
+        if (bitmapdata != null && bitmapdata.length > 0) {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
+
+            path = getPackageCodePath() + "/" + SystemClock.currentThreadTimeMillis() + ".jpg";
+            saveBitmap(bitmap, path);
+        }
+
+        try {
+            if (null != mCallBack) {
+                if (!TextUtils.isEmpty(path)) {
+                    mCallBack.onReceive("save to file: " + path);
+                } else {
+                    Log.w(TAG, "onFileDescriptorEvents: receive nothing");
+                }
+            } else {
+                Log.w(TAG, "onFileDescriptorEvents: callback is null");
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+
+        return TextUtils.isEmpty(path) ? MessageQueue.OnFileDescriptorEventListener.EVENT_ERROR : MessageQueue.OnFileDescriptorEventListener.EVENT_INPUT;
+    }
+
+    private void saveBitmap(Bitmap bitmap, String path) {
+        if(bitmap != null){
+            try {
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(path); //here is set your file path where you want to save or also here you can set file object directly
+
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream); // bitmap is your Bitmap instance, if you want to compress it you can compress reduce percentage
+                    // PNG is a lossless format, the compression factor (100) is ignored
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (outputStream != null) {
+                            outputStream.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

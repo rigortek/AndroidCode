@@ -231,14 +231,14 @@ public class MainActivity extends AppCompatActivity {
     private void writePipe() {  // write data > 1MB
         Log.d(TAG, ", writePipe: " + mFds[1] + ", " + mFds[1].getFileDescriptor());
         try {
-//            ParcelFileDescriptor.AutoCloseOutputStream output = new ParcelFileDescriptor.AutoCloseOutputStream(mFds[1]);
-//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
-//            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-//            byte[] bitmapdata = stream.toByteArray();
-//            output.write(bitmapdata);
-            String test = "1234567890";
-            output.write(test.getBytes());
+            ParcelFileDescriptor.AutoCloseOutputStream output = new ParcelFileDescriptor.AutoCloseOutputStream(mFds[1]);
+            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] bitmapdata = stream.toByteArray();
+            output.write(bitmapdata);
+//            String test = "1234567890";
+//            output.write(test.getBytes());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
