@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -53,9 +54,9 @@ public class MessengerService extends Service {
                 @Override
                 public int onFileDescriptorEvents(@NonNull FileDescriptor fd, int events) {
                     Log.d(TAG, "onFileDescriptorEvents: " + fd + ", " + events);
-//                    return save2String();
+                    return save2String();
 
-                    return save2File();
+//                    return save2File();
                 }
             };
         }
@@ -97,30 +98,38 @@ public class MessengerService extends Service {
         return TextUtils.isEmpty(sb.toString()) ? MessageQueue.OnFileDescriptorEventListener.EVENT_ERROR : MessageQueue.OnFileDescriptorEventListener.EVENT_INPUT;
     }
 
+    // TODO 问题1：> 1M图片文件，保存到此保持后文件会变大，虽然也是可以打开；
+    // TODO 问题2：> 1M图片文件，onFileDescriptorEvents会不断收到回调，但除第一次有内容，后续绋无内容，原因不明？
     private int save2File() {
         ParcelFileDescriptor.AutoCloseInputStream reader = new ParcelFileDescriptor.AutoCloseInputStream(mPfd);
 
         ByteArrayOutputStream total = new ByteArrayOutputStream();
-        final byte[] buffer = new byte[2048];
+        final byte[] buffer = new byte[512];
         int size = 0;
-        do {
-            try {
-                size = reader.read(buffer, 0, buffer.length);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (size > 0) {
-                total.write(buffer, 0, size);
-            }
-        } while (size > 0);
+        try {
+            do {
+                try {
+                    size = reader.read(buffer, 0, buffer.length);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                if (size > 0) {
+                    total.write(buffer, 0, size);
+                }
+            } while (size > 0);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         String path = "";
-        byte[] bitmapdata = total.toByteArray();
-        if (bitmapdata != null && bitmapdata.length > 0) {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata, 0, bitmapdata.length);
-
-            path = getPackageCodePath() + "/" + SystemClock.currentThreadTimeMillis() + ".jpg";
-            saveBitmap(bitmap, path);
+        byte[] totalByte = total.toByteArray();
+        if (totalByte != null && totalByte.length > 0) {
+            path = getCacheDir() + "/" + System.currentTimeMillis() + ".jpg";
+            File file = new File(path);
+            if (file.exists()) {
+                file.delete();
+            }
+            writeToFile(totalByte, path);
         }
 
         try {
@@ -137,32 +146,16 @@ public class MessengerService extends Service {
             e.printStackTrace();
         }
 
-        return TextUtils.isEmpty(path) ? MessageQueue.OnFileDescriptorEventListener.EVENT_ERROR : MessageQueue.OnFileDescriptorEventListener.EVENT_INPUT;
+        return MessageQueue.OnFileDescriptorEventListener.EVENT_INPUT;
     }
 
-    private void saveBitmap(Bitmap bitmap, String path) {
-        if(bitmap != null){
-            try {
-                FileOutputStream outputStream = null;
-                try {
-                    outputStream = new FileOutputStream(path); //here is set your file path where you want to save or also here you can set file object directly
-
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream); // bitmap is your Bitmap instance, if you want to compress it you can compress reduce percentage
-                    // PNG is a lossless format, the compression factor (100) is ignored
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    try {
-                        if (outputStream != null) {
-                            outputStream.close();
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+    public void writeToFile(byte[] data, String fileName) {
+        try {
+            FileOutputStream out = new FileOutputStream(fileName);
+            out.write(data);
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

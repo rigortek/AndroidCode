@@ -32,6 +32,7 @@ import com.cw.secondapp.IMessengerService;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 //import libcore.io.IoUtils;
@@ -232,18 +233,28 @@ public class MainActivity extends AppCompatActivity {
         Log.d(TAG, ", writePipe: " + mFds[1] + ", " + mFds[1].getFileDescriptor());
         try {
             ParcelFileDescriptor.AutoCloseOutputStream output = new ParcelFileDescriptor.AutoCloseOutputStream(mFds[1]);
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.big_jpg);
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] bitmapdata = stream.toByteArray();
-            output.write(bitmapdata);
-//            String test = "1234567890";
-//            output.write(test.getBytes());
+//            InputStream inStream = context.getResources().openRawResource(R.raw.big_jpg);
+//            output.write(convertStreamToByteArray(inStream));
+//            inStream.close();
+
+            String test = "1234567890";
+            output.write(test.getBytes());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static byte[] convertStreamToByteArray(InputStream is) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buff = new byte[10240];
+        int i = Integer.MAX_VALUE;
+        while ((i = is.read(buff, 0, buff.length)) > 0) {
+            baos.write(buff, 0, i);
+        }
+
+        return baos.toByteArray(); // be sure to close InputStream in calling function
     }
 
     @Override
