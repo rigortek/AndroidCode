@@ -1,0 +1,4 @@
+include ':deriveFromLayout'
+include ':deriveFromCtrl'
+include ':app'
+rootProject.name = "SelfDefineCtrl"

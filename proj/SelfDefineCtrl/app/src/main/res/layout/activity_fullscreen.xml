@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0099cc"
+    android:orientation="vertical"
+    tools:context=".FullscreenActivity">
+
+    <LinearLayout
+        android:id="@+id/fullscreen_content_controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black_overlay"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <com.cw.derivefromctrl.SubmitButton
+            android:id="@+id/deriveFromCtrlButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </com.cw.derivefromctrl.SubmitButton>
+
+        <com.cw.derivefromlayout.LineItemView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.cw.derivefromlayout.LineItemView>
+
+        <com.cw.derivefromlayout.LineItemView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </com.cw.derivefromlayout.LineItemView>
+
+    </LinearLayout>
+
+</LinearLayout>
