@@ -129,6 +129,9 @@ public class MainActivity extends AppCompatActivity {
 //                getContentResolver().registerContentObserver(Uri.parse("content://businessprovider.authorities/descendant"), true,
 //                        new OufengContentObserver(getApplicationContext(), handler));
 
+                // 伪造通知，自发自收，完全没有问题
+                // getContentResolver().notifyChange(Uri.parse("content://businessprovider.authorities/descendant"), null);
+
                 getContentResolver().call(Uri.parse(PROVIDER_AUTHORITIES), "onClick", null, null);
             }
         });
