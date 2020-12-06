@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <View
@@ -15,7 +15,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/line_item_selector"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:clickable="true"
+        >
         <TextView
             android:id="@+id/tvLeft"
             android:layout_width="wrap_content"
@@ -23,8 +25,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:textSize="20dp"
-            android:textColor="#000000"
-            android:text="Title">
+            android:textColor="#000000">
 
         </TextView>
 
@@ -32,7 +33,6 @@
             android:id="@+id/tvRight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Content"
             android:layout_toLeftOf="@id/ivArrow"
             android:layout_marginRight="5dp"
             android:textSize="16dp"
