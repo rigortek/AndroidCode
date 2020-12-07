@@ -29,26 +29,35 @@
 
         </TextView>
 
-        <TextView
-            android:id="@+id/tvRight"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toLeftOf="@id/ivArrow"
-            android:layout_marginRight="5dp"
-            android:textSize="16dp"
-            android:textColor="#1C1A1A"
-            android:layout_centerVertical="true">
 
-        </TextView>
-
-        <ImageView
-            android:id="@+id/ivArrow"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:background="@drawable/arrow_black">
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
 
-        </ImageView>
+            <TextView
+                android:id="@+id/tvRight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/ivArrow"
+                android:layout_marginRight="5dp"
+                android:textSize="16dp"
+                android:textColor="#1C1A1A" >
+
+            </TextView>
+
+            <ImageView
+                android:id="@+id/ivArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/arrow_black">
+
+            </ImageView>
+
+        </LinearLayout>
+
     </RelativeLayout>
 
     <View

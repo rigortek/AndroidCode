@@ -67,8 +67,7 @@ public class LineItemView extends RelativeLayout {
     }
 
     public LineItemView setIvArrayVisibility(boolean visibility) {
-//        ivArrow.setVisibility(visibility ? View.VISIBLE : View.GONE);
-        ivArrow.setVisibility(visibility ? View.VISIBLE : View.INVISIBLE);
+        ivArrow.setVisibility(visibility ? View.VISIBLE : View.GONE);
         return this;
     }
 
