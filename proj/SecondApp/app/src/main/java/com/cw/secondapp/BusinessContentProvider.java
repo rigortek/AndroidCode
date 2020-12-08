@@ -13,6 +13,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
+
 public class BusinessContentProvider extends ContentProvider {
     public static final String TAG = "jcw";
     Context mContext;
@@ -23,7 +25,7 @@ public class BusinessContentProvider extends ContentProvider {
 
         // 人为制造crash
         mContext = getContext();
-        mSelfOpenHelper = new SelfOpenHelper(mContext, "", null, 1);
+        mSelfOpenHelper = new SelfOpenHelper(mContext, "oufeng", null, 1);
 //        if (null != mContext) {
 //            mContext = null;
 //        }
@@ -41,7 +43,19 @@ public class BusinessContentProvider extends ContentProvider {
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
 //        getCallingPackage();
-        return null;
+        List<String> segments = uri.getPathSegments();
+        if (segments.isEmpty()) {
+            Log.e("LOG_TAG", "getPathSegments error");
+            return null;
+        }
+
+        SQLiteDatabase readableDatabase = mSelfOpenHelper.getReadableDatabase();
+        if (null != readableDatabase) {
+            return readableDatabase.query(segments.get(0), null, selection, selectionArgs, null, null, sortOrder);
+        } else {
+            Log.e("LOG_TAG", "getReadableDatabase response null");
+            return null;
+        }
     }
 
     @Nullable
@@ -79,6 +93,16 @@ public class BusinessContentProvider extends ContentProvider {
 
         getContext().getContentResolver().notifyChange(Uri.parse("content://businessprovider.authorities/descendant"), null);
 
+        ContentValues contentValues = new ContentValues();
+        for (int i = 0; i < 10; i++) {
+            contentValues.clear();
+            contentValues.put(KEYNAME, "key" + i + INDEX);
+            ++INDEX;
+            contentValues.put(KEYVALUE, String.valueOf(i));
+            mSelfOpenHelper.getWritableDatabase().insert(TABLE_HUNAN, null, contentValues);
+        }
+
+
 //        // verify is support concurrence start
 //        {
 //            // section for use getReadableDatabase or getWritableDatabase
@@ -106,6 +130,13 @@ public class BusinessContentProvider extends ContentProvider {
         return super.call(method, arg, extras);
     }
 
+    static final String TABLE_HUNAN = "hunan";
+    static final String TABLE_SHANGHAI = "shanghai";
+    static final String TABLE_GUANXI = "guanxi";
+    static final String KEYNAME = "name";
+    static final String KEYVALUE = "value";
+    public static int INDEX = 0;
+
     static private class SelfOpenHelper extends SQLiteOpenHelper {
         public SelfOpenHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
             super(context, name, factory, version);
@@ -113,7 +144,12 @@ public class BusinessContentProvider extends ContentProvider {
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-
+            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_HUNAN +
+                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE ON CONFLICT REPLACE NOT NULL, value TEXT)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_SHANGHAI +
+                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE ON CONFLICT REPLACE NOT NULL, value TEXT)");
+            db.execSQL("CREATE TABLE IF NOT EXISTS " + TABLE_GUANXI +
+                    " (_id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT UNIQUE ON CONFLICT REPLACE NOT NULL, value TEXT)");
         }
 
         @Override

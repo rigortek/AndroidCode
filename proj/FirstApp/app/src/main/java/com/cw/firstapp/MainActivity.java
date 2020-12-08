@@ -19,6 +19,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.os.TransactionTooLargeException;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -30,9 +31,14 @@ import com.cw.secondapp.ICallBack;
 import com.cw.secondapp.IMessengerService;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 
 //import libcore.io.IoUtils;
@@ -58,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
     Button mBtMiltiCallProvider;
     Button mBtToNextActivity;
     Button mBtSendFileToOtherProcess;
+    Button mBtDownloadRedirectUrl;
 
     ParcelFileDescriptor[] mFds;
 
@@ -220,6 +227,23 @@ public class MainActivity extends AppCompatActivity {
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+
+        mBtDownloadRedirectUrl = (Button) findViewById(R.id.bt_dowload_redirect_url);
+        mBtDownloadRedirectUrl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.d(TAG, "run: start download");
+                        String url = "";
+                        File dst = new File(getCacheDir().toString() + File.separator + SystemClock.currentThreadTimeMillis() + ".zip");
+                        downloadFile(url, dst);
+                        Log.d(TAG, "run: end download");
+                    }
+                }).start();
             }
         });
     }
@@ -423,5 +447,91 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Downloads a file from a URL
+     *
+     * @param fileURL HTTP URL of the file to be downloaded
+     * @param file    File of save the file
+     * @throws IOException
+     */
+    public int downloadFile(String fileURL, File file) {
+        int result = -1;
+        FileOutputStream fileOutput = null;
+        InputStream inputStream = null;
+
+        try {
+            //set the download URL, a url that points to a file on the internet
+            //this is the file to be downloaded
+            URL url = new URL(fileURL);
+
+            //create the new connection
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setConnectTimeout(20_000);
+            urlConnection.setReadTimeout(20_000);
+//            urlConnection.setInstanceFollowRedirects(false);
+            int responseCode = urlConnection.getResponseCode();
+
+            // always check HTTP response code first
+            if (HttpURLConnection.HTTP_OK == responseCode) {
+
+                //set up some things on the connection
+                urlConnection.setRequestMethod("GET");
+
+                //and connect!
+                urlConnection.connect();
+
+                //this will be used to write the downloaded data into the file we created
+                fileOutput = new FileOutputStream(file);
+
+                //this will be used in reading the data from the internet
+                inputStream = urlConnection.getInputStream();
+
+                //this is the total size of the file
+                //int totalSize = urlConnection.getContentLength();
+                //variable to store total downloaded bytes
+                int downloadedSize = 0;
+
+                //create a buffer...
+                byte[] buffer = new byte[1024];
+                int bufferLength = 0; //used to store a temporary size of the buffer
+
+                //now, read through the input buffer and write the contents to the file
+                while ((bufferLength = inputStream.read(buffer)) > 0) {
+                    //add the data in the buffer to the file in the file output stream (the file on the sd card
+                    fileOutput.write(buffer, 0, bufferLength);
+                    //add up the size so we know how much is downloaded
+                    downloadedSize += bufferLength;
+                    //this is where you would do something to report the prgress, like this maybe
+                    // updateProgress(downloadedSize, totalSize);
+                }
+
+                result = 0;
+            } else {
+                Log.v(TAG, "error, response code: " + responseCode);
+            }
+            urlConnection.disconnect();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            Log.v(TAG, "error, " + e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.v(TAG, "error, " + e.getMessage());
+        } finally {
+            //close the output stream when done
+            try {
+                if (null != fileOutput) {
+                    fileOutput.close();
+                }
+                if (null != inputStream) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return result;
     }
 }

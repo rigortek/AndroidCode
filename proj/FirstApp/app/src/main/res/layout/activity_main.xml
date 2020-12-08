@@ -62,4 +62,15 @@
         android:textAllCaps="false"
         android:text="Send file to other process" />
 
+    <Button
+        android:id="@+id/bt_dowload_redirect_url"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_sendfile_to_other_process"
+        android:textAllCaps="false"
+        android:text="Download redirect url zip package" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
