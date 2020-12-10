@@ -84,49 +84,39 @@ public class BusinessContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) {
-        Log.d(TAG, "Entry call provider: " + method);
+        Log.d(TAG, "Entry call provider: " + method + ", Thread: " + Thread.currentThread().getName());
 //        try {
 //            throw new NullPointerException("call fake exception for print callstack");
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
 
-        getContext().getContentResolver().notifyChange(Uri.parse("content://businessprovider.authorities/descendant"), null);
+//        getContext().getContentResolver().notifyChange(Uri.parse("content://businessprovider.authorities/descendant"), null);
+//
+//        ContentValues contentValues = new ContentValues();
+//        for (int i = 0; i < 10; i++) {
+//            contentValues.clear();
+//            contentValues.put(KEYNAME, "key" + i + INDEX);
+//            ++INDEX;
+//            contentValues.put(KEYVALUE, String.valueOf(i));
+//            mSelfOpenHelper.getWritableDatabase().insert(TABLE_HUNAN, null, contentValues);
+//        }
 
-        ContentValues contentValues = new ContentValues();
-        for (int i = 0; i < 10; i++) {
-            contentValues.clear();
-            contentValues.put(KEYNAME, "key" + i + INDEX);
-            ++INDEX;
-            contentValues.put(KEYVALUE, String.valueOf(i));
-            mSelfOpenHelper.getWritableDatabase().insert(TABLE_HUNAN, null, contentValues);
+
+        // verify is support concurrence start
+        {
+            // section for use getReadableDatabase or getWritableDatabase
+            mSelfOpenHelper.getReadableDatabase().execSQL("select * from hunan");
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
-
-
-//        // verify is support concurrence start
-//        {
-//            // section for use getReadableDatabase or getWritableDatabase
-////            mSelfOpenHelper.getReadableDatabase().execSQL("");
-//            try {
-//                Thread.sleep(100);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//
-//        {
-//            // section for data parse
-//            try {
-//                Thread.sleep(100);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
 
         // verify is support concurrence end
 
-        Log.d(TAG, "End call provider: " + method);
+        Log.d(TAG, "End call provider: " + method + ", Thread: " + Thread.currentThread().getName());
         return super.call(method, arg, extras);
     }
 

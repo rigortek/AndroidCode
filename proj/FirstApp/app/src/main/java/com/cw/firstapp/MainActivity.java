@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 Thread firstThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        for (int i = 0; i < 10; i++) {
+                        for (int i = 0; i < 5; i++) {
                             getContentResolver().call(Uri.parse(PROVIDER_AUTHORITIES), "Thread 1 call index: " + i, null, null);
                         }
                     }
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 Thread secondThread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        for (int i = 0; i < 10; i++) {
+                        for (int i = 0; i < 5; i++) {
                             getContentResolver().call(Uri.parse(PROVIDER_AUTHORITIES), "Thread 2 call index: " + i, null, null);
                         }
                     }
