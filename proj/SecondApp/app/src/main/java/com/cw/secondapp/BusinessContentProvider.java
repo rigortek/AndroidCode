@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -84,7 +85,8 @@ public class BusinessContentProvider extends ContentProvider {
     @Nullable
     @Override
     public Bundle call(@NonNull String method, @Nullable String arg, @Nullable Bundle extras) {
-        Log.d(TAG, "Entry call provider: " + method + ", Thread: " + Thread.currentThread().getName());
+        boolean isMainThread = Looper.getMainLooper().equals(Looper.myLooper());
+        Log.d(TAG, "Entry call provider: " + method + ", Thread: " + Thread.currentThread().getName() + ", is main thread: " + isMainThread);
 //        try {
 //            throw new NullPointerException("call fake exception for print callstack");
 //        } catch (Exception e) {
@@ -116,7 +118,7 @@ public class BusinessContentProvider extends ContentProvider {
 
         // verify is support concurrence end
 
-        Log.d(TAG, "End call provider: " + method + ", Thread: " + Thread.currentThread().getName());
+        Log.d(TAG, "End call provider: " + method + ", Thread: " + Thread.currentThread().getName() + ", is main thread: " + isMainThread);
         return super.call(method, arg, extras);
     }
 

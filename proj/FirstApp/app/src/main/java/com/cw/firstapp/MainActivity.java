@@ -139,6 +139,8 @@ public class MainActivity extends AppCompatActivity {
                 // 伪造通知，自发自收，完全没有问题
                 // getContentResolver().notifyChange(Uri.parse("content://businessprovider.authorities/descendant"), null);
 
+                boolean isMainThread = Looper.getMainLooper().equals(Looper.myLooper());
+                Log.d(TAG, "onClick: is main thread: " + isMainThread);
                 getContentResolver().call(Uri.parse(PROVIDER_AUTHORITIES), "onClick", null, null);
             }
         });
@@ -154,6 +156,8 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         for (int i = 0; i < 5; i++) {
+                            boolean isMainThread = Looper.getMainLooper().equals(Looper.myLooper());
+                            Log.d(TAG, "onClick: is main thread: " + isMainThread);
                             getContentResolver().call(Uri.parse(PROVIDER_AUTHORITIES), "Thread 1 call index: " + i, null, null);
                         }
                     }
