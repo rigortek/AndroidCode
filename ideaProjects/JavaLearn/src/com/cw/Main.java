@@ -1,5 +1,7 @@
 package com.cw;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 public class Main {
@@ -20,6 +22,13 @@ public class Main {
             e.printStackTrace();
         }
         System.out.printf(System.currentTimeMillis() - start + ", End test\n");
+
+
+        Map<String, String>  compareMap1 = new LinkedHashMap<>();
+        compareMap1.put("1", "2");
+        Map<String, String>  compareMap2 = new LinkedHashMap<>();
+        compareMap2.put("1", "1");
+        compareMap(compareMap1, compareMap2);
 
 //        multiThread2();
     }
@@ -88,5 +97,17 @@ public class Main {
             thread.setPriority(Thread.MIN_PRIORITY);
             thread.start();
         }
+    }
+
+    public static boolean compareMap(Map<String, String> commonMap1,
+                                     Map<String, String> commonMap2) {
+        boolean updated = false;
+        if (commonMap1 != null) {
+            updated = null == commonMap2 ? !commonMap1.isEmpty() : !commonMap2.equals(commonMap1);
+        } else {
+            updated = null != commonMap2 ? !commonMap2.isEmpty() : false;
+        }
+
+        return updated;
     }
 }
