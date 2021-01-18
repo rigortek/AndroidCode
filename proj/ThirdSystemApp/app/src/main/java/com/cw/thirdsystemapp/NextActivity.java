@@ -5,8 +5,18 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +27,35 @@ import android.view.View;
  */
 public class NextActivity extends AppCompatActivity {
     public static final String TAG = "jcw";
+
+    private class NextBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ConnectivityManager.CONNECTIVITY_ACTION.equals(action)) {
+                int networkType = intent.getIntExtra(ConnectivityManager.EXTRA_NETWORK_TYPE, -1);
+                if (networkType == ConnectivityManager.TYPE_ETHERNET || networkType == ConnectivityManager.TYPE_WIFI) {
+                    ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo info = connManager.getActiveNetworkInfo();
+                    if (null == info) {
+                        // TODO: 21-1-18  disconnected
+                    }
+
+                    String subTypeName;
+                    Log.d(TAG, info.getType() + ", onReceive: getSubtypeName: " + info.getSubtypeName() + ", networkType: " + networkType);
+                    if (TextUtils.isEmpty(subTypeName = info.getSubtypeName())
+                            || (!TextUtils.isEmpty(subTypeName) && subTypeName.toLowerCase().equals("eth0"))) {
+                        NetworkInfo.State state = info.getState();
+                        if (state == NetworkInfo.State.CONNECTED || state == NetworkInfo.State.DISCONNECTED) {
+                            // TODO: 21-1-18 connected or disconnected
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new NextBroadcastReceiver();
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -191,5 +230,16 @@ public class NextActivity extends AppCompatActivity {
     protected void onResume() {
         Log.d(TAG, "onResume: NextActivity");
         super.onResume();
+
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(mBroadcastReceiver, intentFilter);
+    }
+
+    @Override
+    protected void onStop() {
+        unregisterReceiver(mBroadcastReceiver);
+
+        super.onStop();
     }
 }
