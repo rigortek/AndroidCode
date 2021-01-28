@@ -185,15 +185,15 @@ public class MainActivity extends AppCompatActivity {
         mBtToNextActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent i = new Intent();
-//                i.setClass(getApplicationContext(), NextActivity.class);
-//                i.setAction(Intent.ACTION_MAIN);
-//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                startActivity(i);
+                Intent i = new Intent();
+                i.setClass(getApplicationContext(), NextActivity.class);
+                i.setAction(Intent.ACTION_MAIN);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(i);
 
 //                chooseActivity();
 
-                transferBitBitmapFail();
+//                transferBitBitmapFail();
             }
         });
 
@@ -289,13 +289,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        // verify onStop call stack
+    protected void onPause() {
+        super.onPause();
+
+        try {
+            throw new NullPointerException("fake NullPointerException");
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
 //        try {
-//            throw new NullPointerException("call fake exception for print callstack");
-//        } catch (Exception e) {
+//            Thread.sleep(10_000);
+//        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
+    }
+
+    @Override
+    protected void onStop() {
+        // verify onStop call stack
+        try {
+            throw new NullPointerException("call fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         super.onStop();
     }

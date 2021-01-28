@@ -17,6 +17,11 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import java.lang.reflect.InvocationTargetException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.concurrent.Callable;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -132,11 +137,25 @@ public class NextActivity extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+        try {
+            throw new NullPointerException("call fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        try {
+            throw new NullPointerException("call fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 //        mImageView.setVisibility(View.VISIBLE);
 //        mImageView.startAnimation(mRotateAnimation);
     }
@@ -238,6 +257,13 @@ public class NextActivity extends AppCompatActivity {
                } else {
                    looperThread.sendMessageDelayed();
                }
+            } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getIpbyHostName();
+                    }
+                }).start();
             } else {
                 Message message = new Message();
                 message.what = LooperDemo.WHAT_MSG_ID_1;
@@ -247,5 +273,36 @@ public class NextActivity extends AppCompatActivity {
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    /*
+    * look up ip by host name
+    *
+     */
+    private static void getIpbyHostName() {
+        try {
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            displayStuff("local host", inetAddress);
+            Log.d(TAG, "getIpbyHostName: --------------------------");
+
+            InetAddress inetAddress2 = InetAddress.getByName("www.baidu.com");
+            displayStuff("www.baidu.com", inetAddress2);
+
+            Log.d(TAG, "getIpbyHostName: --------------------------");
+            InetAddress[] inetAddressArray = InetAddress.getAllByName("www.google.com");
+            for (int i = 0; i < inetAddressArray.length; i++) {
+                displayStuff("www.google.com #" + (i + 1), inetAddressArray[i]);
+            }
+        } catch (Exception e) {
+            Log.d(TAG, "getIpbyHostName: " + e.getMessage());
+        }
+    }
+
+    public static void displayStuff(String whichHost, InetAddress inetAddress) {
+        Log.d(TAG, "displayStuff: --------------------------");
+        Log.d(TAG, "displayStuff: Which Host:" + whichHost);
+        Log.d(TAG, "displayStuff: Canonical Host Name:" + inetAddress.getCanonicalHostName());
+        Log.d(TAG, "displayStuff: Host Name:" + inetAddress.getHostName());
+        Log.d(TAG, "displayStuff: Host Address:" + inetAddress.getHostAddress());
     }
 }
