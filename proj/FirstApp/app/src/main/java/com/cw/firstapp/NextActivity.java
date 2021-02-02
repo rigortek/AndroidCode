@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -116,6 +117,7 @@ public class NextActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: NextActivity");
 
         setContentView(R.layout.activity_next);
 
@@ -150,6 +152,8 @@ public class NextActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        Log.d(TAG, "onResume: NextActivity");
+
         try {
             throw new NullPointerException("call fake exception for print callstack");
         } catch (Exception e) {
@@ -163,8 +167,44 @@ public class NextActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause: NextActivity");
 //        mImageView.clearAnimation();
 //        mImageView.setVisibility(View.GONE);
+    }
+
+
+
+    @Override
+    public void onBackPressed() {
+        Log.d(TAG, "onBackPressed: MainActivity");
+
+        setResult(RESULT_FIRST_USER + RESULT_FIRST_USER, new Intent("fake_action_for_test"));
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart: NextActivity");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: NextActivity");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: NextActivity");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d(TAG, "onDestroy: NextActivity");
     }
 
     @Override
@@ -258,6 +298,9 @@ public class NextActivity extends AppCompatActivity {
                    looperThread.sendMessageDelayed();
                }
             } else if (keyCode == KeyEvent.KEYCODE_BACK) {
+                Log.d(TAG, "onKeyDown: KEYCODE_BACK");
+//                setResult(RESULT_FIRST_USER + RESULT_FIRST_USER, new Intent("fake_action_for_test"));
+
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

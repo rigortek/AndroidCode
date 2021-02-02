@@ -1,5 +1,6 @@
 package com.cw.firstapp;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String BROADCAST_RECEIVE_RPERMISSION_TEST = "com.cw.firstapp.permission.TEST";
     public static final String PROVIDER_AUTHORITIES = "content://businessprovider.authorities";
 
+    public static final int REQUEST_CODE = 1000;
+
     Button mBtSendBroadcast;
     Button mBtAccessContentProvider;
     Button mBtMiltiCallProvider;
@@ -107,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate: MainActivity");
 
         setContentView(R.layout.activity_main);
         handler = new Handler(getApplication().getMainLooper());
@@ -188,8 +192,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent();
                 i.setClass(getApplicationContext(), NextActivity.class);
                 i.setAction(Intent.ACTION_MAIN);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
+//                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                startActivity(i);
+                startActivityForResult(i, REQUEST_CODE);
 
 //                chooseActivity();
 
@@ -287,16 +292,19 @@ public class MainActivity extends AppCompatActivity {
 
         return baos.toByteArray(); // be sure to close InputStream in calling function
     }
+    
+    
 
     @Override
     protected void onPause() {
         super.onPause();
+        Log.d(TAG, "onPause: MainActivity");
 
-        try {
-            throw new NullPointerException("fake NullPointerException");
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            throw new NullPointerException("fake NullPointerException");
+//        } catch (NullPointerException e) {
+//            e.printStackTrace();
+//        }
 
 //        try {
 //            Thread.sleep(10_000);
@@ -307,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        Log.d(TAG, "onStop: MainActivity");
         // verify onStop call stack
         try {
             throw new NullPointerException("call fake exception for print callstack");
@@ -318,8 +327,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d(TAG, "onDestroy: MainActivity");
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: MainActivity");
         if (null != mIMessengerService) {
             return;
         }
@@ -397,6 +414,47 @@ public class MainActivity extends AppCompatActivity {
         try {
             startService(service);
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Log.d(TAG, "onResume: MainActivity");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        Log.d(TAG, "onRestart: MainActivity");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d(TAG, "onActivityResult: MainActivity, requestCode:" + requestCode + ", resultCode:" + resultCode);
+
+        if (requestCode == REQUEST_CODE) {
+            switch (resultCode) {
+                case RESULT_OK:
+                    Log.d(TAG, "onActivityResult: operation succeeded");
+                    break;
+                case RESULT_CANCELED:
+                    Log.d(TAG, "onActivityResult: operation canceled");
+                    break;
+                case RESULT_FIRST_USER:
+                    Log.d(TAG, "onActivityResult: user-defined activity results");
+                    break;
+            }
+        }
+
+        try {
+            throw new NullPointerException("fake NullPointerException");
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
