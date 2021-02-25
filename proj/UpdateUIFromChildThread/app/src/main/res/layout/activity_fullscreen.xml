@@ -43,6 +43,12 @@
 
     <!-- TODO imageview_selector对Butt起仍作用, TextView, ImageView 等OK -->
     <Button
+        android:id="@+id/child_thread_switch_to_main_thread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="子线程切换主子线更新UI" />
+
+    <Button
         android:id="@+id/finishBt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

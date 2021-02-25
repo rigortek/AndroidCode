@@ -1,5 +1,6 @@
 package com.cw.updateuifromchildthread;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.PixelFormat;
@@ -7,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -27,6 +29,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private TextView child_thread_access_ui;
     private TextView main_thread_access_ui;
 
+    private Button child_thread_switch_to_main_thread;
     private Button finishBt;
     TextView subThreadCreateTextView;
 
@@ -41,6 +44,9 @@ public class FullscreenActivity extends AppCompatActivity {
                     break;
                 case R.id.main_thread_access_ui:
                     mainThreadAccessView();
+                    break;
+                case R.id.child_thread_switch_to_main_thread:
+                    childThreadSwitch2MainThread(methodIndex);
                     break;
                 case R.id.finishBt:
                     finish();
@@ -70,8 +76,12 @@ public class FullscreenActivity extends AppCompatActivity {
         main_thread_access_ui = findViewById(R.id.main_thread_access_ui);
         main_thread_access_ui.setOnClickListener(onClickListener);
 
+        child_thread_switch_to_main_thread = findViewById(R.id.child_thread_switch_to_main_thread);
+        child_thread_switch_to_main_thread.setOnClickListener(onClickListener);
+
         finishBt = findViewById(R.id.finishBt);
-//        finishBt.setBackgroundDrawable(getResources().getDrawable(R.drawable.imageview_selector));
+        finishBt.setOnClickListener(onClickListener);
+//        finishBt.setBackground(getResources().getDrawable(R.drawable.imageview_selector));
 
 
         childThreadAccessView();
@@ -156,5 +166,80 @@ public class FullscreenActivity extends AppCompatActivity {
 
         WindowManager windowManager = getWindowManager();
         windowManager.addView(view, layoutParams);
+    }
+
+    private int methodIndex = 0;
+
+    private static final int WHAT_MESSAGE_ID = 1000;
+
+    private class MyHandler extends android.os.Handler {
+        public MyHandler(@NonNull Looper looper) {
+            super(looper);
+        }
+
+        @Override
+        public void handleMessage(@NonNull Message msg) {
+
+            switch (msg.what) {
+                case WHAT_MESSAGE_ID:
+                    break;
+
+                default:
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    }
+
+    private Handler myHandler = new MyHandler(Looper.getMainLooper());
+
+    private void childThreadSwitch2MainThread(final int method) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                switch (method) {
+                    case 0:
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                subThreadCreateTextView.setText("Hello, set text by runOnUiThread.");
+                            }
+                        });
+                        break;
+                    case 1:
+                        subThreadCreateTextView.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                subThreadCreateTextView.setText("Hello, set text by post.");
+                            }
+                        });
+                        break;
+                    case 2:
+                        myHandler.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                subThreadCreateTextView.setText("Hello, set text by Handler.post.");
+                            }
+                        });
+                        // 或者
+                        Message message = Message.obtain();
+                        message.what = WHAT_MESSAGE_ID;
+                        message.obj = "Hello, set text by Handler.sendMessage.";
+                        myHandler.sendMessage(message);
+                        break;
+                    case 3:
+                        break;
+
+                    default:
+                        break;
+                }
+
+                if (method < 4) {
+                    methodIndex = method + 1;
+                } else {
+                    methodIndex = 0;
+                }
+            }
+        }).start();
     }
 }
