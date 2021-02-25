@@ -2,8 +2,17 @@ package com.cw.updateuifromchildthread;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
 
 
 /**
@@ -12,20 +21,140 @@ import android.widget.Button;
  */
 public class FullscreenActivity extends AppCompatActivity {
 
+    public static final String TAG = "jcw";
+
+    private TextView notice_changeable;
+    private TextView child_thread_access_ui;
+    private TextView main_thread_access_ui;
+
     private Button finishBt;
+    TextView subThreadCreateTextView;
+
+    Thread mThread;
+
+    private class MyOnClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.child_thread_access_ui:
+                    childThreadAccessView();
+                    break;
+                case R.id.main_thread_access_ui:
+                    mainThreadAccessView();
+                    break;
+                case R.id.finishBt:
+                    finish();
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    View.OnClickListener onClickListener = new MyOnClickListener();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mThread = Thread.currentThread();
+
         setContentView(R.layout.activity_fullscreen);
 
-        finishBt = findViewById(R.id.finish);
+        notice_changeable = findViewById(R.id.notice_changeable);
+
+        child_thread_access_ui = findViewById(R.id.child_thread_access_ui);
+        child_thread_access_ui.setOnClickListener(onClickListener);
+
+        main_thread_access_ui = findViewById(R.id.main_thread_access_ui);
+        main_thread_access_ui.setOnClickListener(onClickListener);
+
+        finishBt = findViewById(R.id.finishBt);
 //        finishBt.setBackgroundDrawable(getResources().getDrawable(R.drawable.imageview_selector));
+
+
+        childThreadAccessView();
+        noMainThreadCreateView();
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
+    }
+
+
+    private void childThreadAccessView() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != notice_changeable) {
+                    // sleep will leads to exception:
+                    // android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (Exception e) {
+//                        Log.e(TAG, "run: error: " + e.getMessage());
+//                    }
+                    Log.d(TAG, "run: currentThread " + Thread.currentThread());
+                    Log.d(TAG, "run: is same thread: " + (mThread == Thread.currentThread()));
+                    notice_changeable.setText("Hello, set text one by child thread.");
+                }
+            }
+        }).start();
+    }
+
+
+    private void noMainThreadCreateView() {
+        if (null != subThreadCreateTextView) {
+            return;
+        }
+        subThreadCreateTextView = new TextView(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (null != notice_changeable) {
+                    Looper.prepare();
+                    // subThreadCreateTextView create by no main thread, the main thread has no permission to touch it
+                    addWindow(subThreadCreateTextView);
+                    Log.d(TAG, "run, currentThread " + Thread.currentThread());
+                    subThreadCreateTextView.setText("Hello, set text two by child thread.");
+
+                    Looper.loop();
+                }
+            }
+        }).start();
+    }
+
+    private void mainThreadAccessView() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // subThreadCreateTextView create by no main thread, the main thread has no permission to touch it
+                subThreadCreateTextView.setText("Hello, set text three by main thread.");
+            }
+        }, 1000L);
+    }
+
+    private void addWindow(TextView view) {
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                0, 0,
+                PixelFormat.TRANSPARENT
+        );
+
+        layoutParams.flags= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL;
+        layoutParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            layoutParams.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+        }
+
+        layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
+        layoutParams.x = 150;
+        layoutParams.y = 50;
+
+        WindowManager windowManager = getWindowManager();
+        windowManager.addView(view, layoutParams);
     }
 }

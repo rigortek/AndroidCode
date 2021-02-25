@@ -12,7 +12,7 @@
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
     <TextView
-        android:id="@+id/fullscreen_content"
+        android:id="@+id/notice_changeable"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
@@ -43,7 +43,7 @@
 
     <!-- TODO imageview_selector对Butt起仍作用, TextView, ImageView 等OK -->
     <Button
-        android:id="@+id/finish"
+        android:id="@+id/finishBt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:focusable="true"
