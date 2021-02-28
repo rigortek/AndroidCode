@@ -2,8 +2,14 @@ package com.cw.updateuifromchildthread;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.PixelFormat;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -86,6 +92,8 @@ public class FullscreenActivity extends AppCompatActivity {
 
         childThreadAccessView();
         noMainThreadCreateView();
+
+        registerReceiver();
     }
 
     @Override
@@ -93,6 +101,14 @@ public class FullscreenActivity extends AppCompatActivity {
         super.onPostCreate(savedInstanceState);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        myHandler.removeCallbacks(null);
+
+        unregisterReceiver(broadcastReceiver);
+    }
 
     private void childThreadAccessView() {
         new Thread(new Runnable() {
@@ -181,8 +197,13 @@ public class FullscreenActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
 
             switch (msg.what) {
-                case WHAT_MESSAGE_ID:
-                    break;
+                case WHAT_MESSAGE_ID: {
+                    String target = (String) msg.obj;
+                    if (null != target) {
+                        subThreadCreateTextView.setText(target);
+                    }
+                }
+                break;
 
                 default:
                     break;
@@ -192,6 +213,29 @@ public class FullscreenActivity extends AppCompatActivity {
     }
 
     private Handler myHandler = new MyHandler(Looper.getMainLooper());
+
+    public static final String TEST_ACTION =  "com.cw.updateuifromchildthread.action.TEST";
+    public static final String ACTION_EXTRA_KEY =  "action_key_update_textview";
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if ("com.cw.updateuifromchildthread.action.TEST".equals(intent.getAction())) {
+                String value = intent.getStringExtra(ACTION_EXTRA_KEY);
+                subThreadCreateTextView.setText(null != value ? value : "");
+            }
+        }
+    };
+
+    private void registerReceiver() {
+        IntentFilter intentFilter = new IntentFilter(TEST_ACTION);
+        registerReceiver(broadcastReceiver, intentFilter);
+
+        localBroadcastManager = LocalBroadcastManager.getInstance(getApplicationContext());
+        localBroadcastManager.registerReceiver(broadcastReceiver, intentFilter);
+    }
+
+    private LocalBroadcastManager localBroadcastManager;
 
     private void childThreadSwitch2MainThread(final int method) {
         new Thread(new Runnable() {
@@ -227,19 +271,51 @@ public class FullscreenActivity extends AppCompatActivity {
                         message.obj = "Hello, set text by Handler.sendMessage.";
                         myHandler.sendMessage(message);
                         break;
-                    case 3:
-                        break;
+                    case 3: {
+                        Intent intent = new Intent(TEST_ACTION);
+                        intent.putExtra(ACTION_EXTRA_KEY, "Hello, set text by sendBroadcast.");
+                        sendBroadcast(intent);
+
+                        Intent localIntent = new Intent(TEST_ACTION);
+                        localIntent.putExtra(ACTION_EXTRA_KEY, "Hello, set text by LocalBroadcastManager.sendBroadcast.");
+                        localBroadcastManager.sendBroadcast(localIntent);
+                    }
+                    break;
+
+                    case 4: {
+                        ChildThreadSwitch2MainThreakTask task = new ChildThreadSwitch2MainThreakTask();
+                        task.execute("");
+                    }
+                    break;
 
                     default:
                         break;
                 }
 
-                if (method < 4) {
+                if (method < 5 ) {
                     methodIndex = method + 1;
                 } else {
                     methodIndex = 0;
                 }
             }
         }).start();
+    }
+
+    private class ChildThreadSwitch2MainThreakTask extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        protected String doInBackground(String... params) {
+            return "Hello, set text by AsyncTask.";
+        }
+
+        protected void onProgressUpdate(Integer... progress) {
+        }
+
+        protected void onPostExecute(String result) {
+            subThreadCreateTextView.setText(result);
+        }
     }
 }
