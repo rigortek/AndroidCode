@@ -55,7 +55,7 @@
         android:focusable="true"
         android:clickable="true"
         android:textColor="@color/button_color_selector"
-        android:text="@string/main_thread_access_ui"
+        android:text="Close Activity"
         android:layout_marginTop="5dp"/>
 
 </LinearLayout>

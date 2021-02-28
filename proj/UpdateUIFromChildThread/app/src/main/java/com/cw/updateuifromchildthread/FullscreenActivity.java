@@ -124,7 +124,7 @@ public class FullscreenActivity extends AppCompatActivity {
 //                    }
                     Log.d(TAG, "run: currentThread " + Thread.currentThread());
                     Log.d(TAG, "run: is same thread: " + (mThread == Thread.currentThread()));
-                    notice_changeable.setText("Hello, set text one by child thread.");
+                    updateNoticeText("Hello, set text one by child thread.");
                 }
             }
         }).start();
@@ -144,7 +144,7 @@ public class FullscreenActivity extends AppCompatActivity {
                     // subThreadCreateTextView create by no main thread, the main thread has no permission to touch it
                     addWindow(subThreadCreateTextView);
                     Log.d(TAG, "run, currentThread " + Thread.currentThread());
-                    subThreadCreateTextView.setText("Hello, set text two by child thread.");
+                    updateNoticeText("Hello, set text two by child thread.");
 
                     Looper.loop();
                 }
@@ -157,7 +157,7 @@ public class FullscreenActivity extends AppCompatActivity {
             @Override
             public void run() {
                 // subThreadCreateTextView create by no main thread, the main thread has no permission to touch it
-                subThreadCreateTextView.setText("Hello, set text three by main thread.");
+                updateNoticeText("Hello, set text three by main thread.");
             }
         }, 1000L);
     }
@@ -178,7 +178,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         layoutParams.gravity = Gravity.TOP | Gravity.RIGHT;
         layoutParams.x = 150;
-        layoutParams.y = 50;
+        layoutParams.y = 30;
 
         WindowManager windowManager = getWindowManager();
         windowManager.addView(view, layoutParams);
@@ -200,7 +200,7 @@ public class FullscreenActivity extends AppCompatActivity {
                 case WHAT_MESSAGE_ID: {
                     String target = (String) msg.obj;
                     if (null != target) {
-                        subThreadCreateTextView.setText(target);
+                        updateNoticeText(target);
                     }
                 }
                 break;
@@ -222,7 +222,7 @@ public class FullscreenActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             if ("com.cw.updateuifromchildthread.action.TEST".equals(intent.getAction())) {
                 String value = intent.getStringExtra(ACTION_EXTRA_KEY);
-                subThreadCreateTextView.setText(null != value ? value : "");
+                updateNoticeText(null != value ? value : "");
             }
         }
     };
@@ -246,43 +246,54 @@ public class FullscreenActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                subThreadCreateTextView.setText("Hello, set text by runOnUiThread.");
+                                updateNoticeText("Hello, set text by runOnUiThread.");
                             }
                         });
                         break;
-                    case 1:
-                        subThreadCreateTextView.post(new Runnable() {
+                    case 1: {
+                        notice_changeable.post(new Runnable() {
                             @Override
                             public void run() {
-                                subThreadCreateTextView.setText("Hello, set text by post.");
+                                updateNoticeText("Hello, set text by post.");
                             }
                         });
-                        break;
-                    case 2:
+                    }
+                    break;
+
+                    case 2: {
                         myHandler.post(new Runnable() {
                             @Override
                             public void run() {
-                                subThreadCreateTextView.setText("Hello, set text by Handler.post.");
+                                updateNoticeText("Hello, set text by Handler.post.");
                             }
                         });
+                    }
+                    break;
+
+                    case 3: {
                         // 或者
                         Message message = Message.obtain();
                         message.what = WHAT_MESSAGE_ID;
                         message.obj = "Hello, set text by Handler.sendMessage.";
                         myHandler.sendMessage(message);
-                        break;
-                    case 3: {
+                    }
+                    break;
+
+                    case 4: {
                         Intent intent = new Intent(TEST_ACTION);
                         intent.putExtra(ACTION_EXTRA_KEY, "Hello, set text by sendBroadcast.");
                         sendBroadcast(intent);
+                    }
+                    break;
 
+                    case 5: {
                         Intent localIntent = new Intent(TEST_ACTION);
                         localIntent.putExtra(ACTION_EXTRA_KEY, "Hello, set text by LocalBroadcastManager.sendBroadcast.");
                         localBroadcastManager.sendBroadcast(localIntent);
                     }
                     break;
 
-                    case 4: {
+                    case 6: {
                         ChildThreadSwitch2MainThreakTask task = new ChildThreadSwitch2MainThreakTask();
                         task.execute("");
                     }
@@ -292,13 +303,17 @@ public class FullscreenActivity extends AppCompatActivity {
                         break;
                 }
 
-                if (method < 5 ) {
+                if (method < 6 ) {
                     methodIndex = method + 1;
                 } else {
                     methodIndex = 0;
                 }
             }
         }).start();
+    }
+
+    private void updateNoticeText(String str) {
+        notice_changeable.setText(str);
     }
 
     private class ChildThreadSwitch2MainThreakTask extends AsyncTask<String, Void, String> {
@@ -315,7 +330,7 @@ public class FullscreenActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(String result) {
-            subThreadCreateTextView.setText(result);
+            updateNoticeText(result);
         }
     }
 }
