@@ -22,6 +22,9 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.sql.Timestamp;
+import java.util.concurrent.TimeUnit;
+
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -316,20 +319,44 @@ public class FullscreenActivity extends AppCompatActivity {
         notice_changeable.setText(str);
     }
 
-    private class ChildThreadSwitch2MainThreakTask extends AsyncTask<String, Void, String> {
+    private class ChildThreadSwitch2MainThreakTask extends AsyncTask<String, Integer, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
+            Log.d(TAG, "onPreExecute: 开始执行异常操作");
         }
 
         protected String doInBackground(String... params) {
-            return "Hello, set text by AsyncTask.";
+            for (int i = 0; i < 6; i++) {
+                setProgress(i * 20);
+                publishProgress(i * 20);   // publishProgress will invoke onProgressUpdate callback
+                try {
+                    TimeUnit.MILLISECONDS.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            try {
+                TimeUnit.MILLISECONDS.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            // 返回结果回调到onPostExecute
+            return "Hello, set text by AsyncTask done.";
         }
 
-        protected void onProgressUpdate(Integer... progress) {
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+
+            updateNoticeText("Current progress: " + values[0]);
         }
 
+        @Override
         protected void onPostExecute(String result) {
+            Log.d(TAG, "onPreExecute: 结束执行异常操作");
             updateNoticeText(result);
         }
     }

@@ -13,7 +13,15 @@ android {
         versionCode 1
         versionName "1.0"
 
+        multiDexEnabled true
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    dexOptions {
+        //incremental = true;
+        preDexLibraries = false
+        javaMaxHeapSize "4g"
     }
 
     buildTypes {
@@ -32,9 +40,18 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
+
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
     implementation('com.android.support:support-v4:22.2.1')
+
+    // implementation files('libs/xmlbeans-3.1.0.jar    // implementation files('libs/xmlbeans-3.1.0.jar')
+//    implementation group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '3.1.0'
+
+//    implementation 'org.apache.poi:poi-ooxml:4.1.2'')
+//    implementation group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '3.1.0'
+
+//    implementation 'org.apache.poi:poi-ooxml:4.1.2'
 }
