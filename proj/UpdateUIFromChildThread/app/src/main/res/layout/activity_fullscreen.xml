@@ -49,6 +49,17 @@
         android:text="子线程切换主子线更新UI" />
 
     <Button
+        android:id="@+id/testHandlerThread"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:clickable="true"
+        android:textColor="@color/button_color_selector"
+        android:text="Test HandlerThread"
+        android:textAllCaps="false"
+        android:layout_marginTop="5dp"/>
+
+    <Button
         android:id="@+id/finishBt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -56,6 +67,7 @@
         android:clickable="true"
         android:textColor="@color/button_color_selector"
         android:text="Close Activity"
+        android:textAllCaps="false"
         android:layout_marginTop="5dp"/>
 
 </LinearLayout>

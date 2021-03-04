@@ -13,17 +13,24 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
+import android.os.Process;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
+
+import asyncmessage.HandlerThreadTest;
+import asyncmessage.UIHandler;
+import asyncmessage.WorkHandler;
 
 
 /**
@@ -40,9 +47,13 @@ public class FullscreenActivity extends AppCompatActivity {
 
     private Button child_thread_switch_to_main_thread;
     private Button finishBt;
+    private Button testHandlerThread;
     TextView subThreadCreateTextView;
 
     Thread mThread;
+    HandlerThread handlerThread;
+    Handler uiHandler;
+    Handler workHandler;
 
     private class MyOnClickListener implements View.OnClickListener {
         @Override
@@ -60,6 +71,26 @@ public class FullscreenActivity extends AppCompatActivity {
                 case R.id.finishBt:
                     finish();
                     break;
+
+                case R.id.testHandlerThread: {
+                    if (null == uiHandler) {
+                        uiHandler = new UIHandler(getApplication(), Looper.getMainLooper());
+                    }
+                    if (null == handlerThread) {
+                        handlerThread = new HandlerThreadTest("test_sip", Process.THREAD_PRIORITY_FOREGROUND);
+                        handlerThread.start();
+                        Log.d(TAG, "onClick: isMainLooper : " + handlerThread.getLooper().equals(Looper.getMainLooper()));
+                        workHandler = new WorkHandler(handlerThread.getLooper(), uiHandler);
+                    }
+
+                    // 可以通过基于HandlerThread中子线程Looper创建的子线程Handler发送消息，从而实现让其持续执行一个个任务
+                    Message msg = Message.obtain();
+                    msg.what = UIHandler.MSG_WORKTHREAD_START;
+                    msg.obj = "invoke handlerthread start work";
+                    Toast.makeText(getApplication(), (String) msg.obj, Toast.LENGTH_SHORT).show();
+                    workHandler.sendMessage(msg);
+                }
+                break;
 
                 default:
                     break;
@@ -92,6 +123,8 @@ public class FullscreenActivity extends AppCompatActivity {
         finishBt.setOnClickListener(onClickListener);
 //        finishBt.setBackground(getResources().getDrawable(R.drawable.imageview_selector));
 
+        testHandlerThread = findViewById(R.id.testHandlerThread);
+        testHandlerThread.setOnClickListener(onClickListener);
 
         childThreadAccessView();
         noMainThreadCreateView();
