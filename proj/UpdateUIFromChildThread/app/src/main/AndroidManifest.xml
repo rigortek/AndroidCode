@@ -12,6 +12,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.UpdateUIFromChildThread">
+
+        <service
+            android:name=".asyncmessage.IntentServiceDemo"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.cw.jcw.intent.action.TEST_ACTION" />
+            </intent-filter>
+        </service>
+
         <activity
             android:name=".FullscreenActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"

@@ -1,4 +1,4 @@
-package asyncmessage;
+package com.cw.updateuifromchildthread.asyncmessage;
 
 import android.content.Context;
 import android.os.Handler;
@@ -7,7 +7,6 @@ import android.os.Message;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.security.InvalidParameterException;
 

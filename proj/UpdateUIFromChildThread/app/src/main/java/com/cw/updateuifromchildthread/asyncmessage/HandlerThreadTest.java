@@ -1,4 +1,4 @@
-package asyncmessage;
+package com.cw.updateuifromchildthread.asyncmessage;
 
 import android.os.HandlerThread;
 

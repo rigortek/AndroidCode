@@ -1,4 +1,4 @@
-package asyncmessage;
+package com.cw.updateuifromchildthread.asyncmessage;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -7,7 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.cw.updateuifromchildthread.FullscreenActivity;
+import com.cw.updateuifromchildthread.Constant;
 
 import java.security.InvalidParameterException;
 import java.util.concurrent.TimeUnit;
@@ -35,13 +35,13 @@ public class WorkHandler extends android.os.Handler {
         switch (msg.what) {
             case UIHandler.MSG_WORKTHREAD_START:
             {
-                Log.d(FullscreenActivity.TAG, "handleMessage: work handler excute task start..." + msg.obj);
+                Log.d(Constant.TAG, "handleMessage: work handler excute task start..." + msg.obj);
                 try {
                     TimeUnit.MILLISECONDS.sleep(1500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                Log.d(FullscreenActivity.TAG, "handleMessage: work handler excute task done..." + msg.obj);
+                Log.d(Constant.TAG, "handleMessage: work handler excute task done..." + msg.obj);
 
                 Message endMessage = Message.obtain();
                 endMessage.what = UIHandler.MSG_WORKTHREAD_DOWE;

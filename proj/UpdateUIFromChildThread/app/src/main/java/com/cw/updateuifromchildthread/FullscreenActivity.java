@@ -25,12 +25,12 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Timestamp;
 import java.util.concurrent.TimeUnit;
 
-import asyncmessage.HandlerThreadTest;
-import asyncmessage.UIHandler;
-import asyncmessage.WorkHandler;
+import com.cw.updateuifromchildthread.asyncmessage.HandlerThreadTest;
+import com.cw.updateuifromchildthread.asyncmessage.IntentServiceDemo;
+import com.cw.updateuifromchildthread.asyncmessage.UIHandler;
+import com.cw.updateuifromchildthread.asyncmessage.WorkHandler;
 
 
 /**
@@ -39,8 +39,6 @@ import asyncmessage.WorkHandler;
  */
 public class FullscreenActivity extends AppCompatActivity {
 
-    public static final String TAG = "jcw";
-
     private TextView notice_changeable;
     private TextView child_thread_access_ui;
     private TextView main_thread_access_ui;
@@ -48,6 +46,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private Button child_thread_switch_to_main_thread;
     private Button finishBt;
     private Button testHandlerThread;
+    private Button testIntentService;
     TextView subThreadCreateTextView;
 
     Thread mThread;
@@ -79,7 +78,7 @@ public class FullscreenActivity extends AppCompatActivity {
                     if (null == handlerThread) {
                         handlerThread = new HandlerThreadTest("test_sip", Process.THREAD_PRIORITY_FOREGROUND);
                         handlerThread.start();
-                        Log.d(TAG, "onClick: isMainLooper : " + handlerThread.getLooper().equals(Looper.getMainLooper()));
+                        Log.d(Constant.TAG, "onClick: isMainLooper : " + handlerThread.getLooper().equals(Looper.getMainLooper()));
                         workHandler = new WorkHandler(handlerThread.getLooper(), uiHandler);
                     }
 
@@ -91,6 +90,24 @@ public class FullscreenActivity extends AppCompatActivity {
                     workHandler.sendMessage(msg);
                 }
                 break;
+
+                case R.id.testIntentService: {
+//                    Intent intent = new Intent(FullscreenActivity.this, IntentServiceDemo.class);
+                    Intent intent = new Intent();
+                    intent.setAction("com.cw.jcw.intent.action.TEST_ACTION");
+//                    intent.setPackage(getPackageName());
+                    intent.setClass(FullscreenActivity.this, IntentServiceDemo.class);
+                    for (int i = 0; i < 3; i++) {
+                        intent.putExtra(Constant.KEY_PARAM, "task id: " + i);
+                        startService(intent);
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(50);
+                        } catch (Exception e) {
+                            Log.e(Constant.TAG, "onClick: sleep " + e.getMessage());
+                        }
+                    }
+                    break;
+                }
 
                 default:
                     break;
@@ -126,6 +143,9 @@ public class FullscreenActivity extends AppCompatActivity {
         testHandlerThread = findViewById(R.id.testHandlerThread);
         testHandlerThread.setOnClickListener(onClickListener);
 
+        testIntentService = findViewById(R.id.testIntentService);
+        testIntentService.setOnClickListener(onClickListener);
+
         childThreadAccessView();
         noMainThreadCreateView();
 
@@ -158,8 +178,8 @@ public class FullscreenActivity extends AppCompatActivity {
 //                    } catch (Exception e) {
 //                        Log.e(TAG, "run: error: " + e.getMessage());
 //                    }
-                    Log.d(TAG, "run: currentThread " + Thread.currentThread());
-                    Log.d(TAG, "run: is same thread: " + (mThread == Thread.currentThread()));
+                    Log.d(Constant.TAG, "run: currentThread " + Thread.currentThread());
+                    Log.d(Constant.TAG, "run: is same thread: " + (mThread == Thread.currentThread()));
                     updateNoticeText("Hello, set text one by child thread.");
                 }
             }
@@ -179,7 +199,7 @@ public class FullscreenActivity extends AppCompatActivity {
                     Looper.prepare();
                     // subThreadCreateTextView create by no main thread, the main thread has no permission to touch it
                     addWindow(subThreadCreateTextView);
-                    Log.d(TAG, "run, currentThread " + Thread.currentThread());
+                    Log.d(Constant.TAG, "run, currentThread " + Thread.currentThread());
                     updateNoticeText("Hello, set text two by child thread.");
 
                     Looper.loop();
@@ -356,7 +376,7 @@ public class FullscreenActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            Log.d(TAG, "onPreExecute: 开始执行异常操作");
+            Log.d(Constant.TAG, "onPreExecute: 开始执行异常操作");
         }
 
         protected String doInBackground(String... params) {
@@ -389,7 +409,7 @@ public class FullscreenActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            Log.d(TAG, "onPreExecute: 结束执行异常操作");
+            Log.d(Constant.TAG, "onPreExecute: 结束执行异常操作");
             updateNoticeText(result);
         }
     }
