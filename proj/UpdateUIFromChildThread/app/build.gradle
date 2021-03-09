@@ -54,4 +54,9 @@ dependencies {
 //    implementation group: 'org.apache.xmlbeans', name: 'xmlbeans', version: '3.1.0'
 
 //    implementation 'org.apache.poi:poi-ooxml:4.1.2'
+
+
+    //OkHttp
+    implementation 'com.squareup.okhttp3:okhttp:3.14.9'
+//    implementation 'com.squareup.okio:okio:1.17.4'
 }

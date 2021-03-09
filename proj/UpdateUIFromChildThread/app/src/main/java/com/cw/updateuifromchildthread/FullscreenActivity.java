@@ -25,12 +25,23 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.cw.updateuifromchildthread.asyncmessage.HandlerThreadTest;
 import com.cw.updateuifromchildthread.asyncmessage.IntentServiceDemo;
 import com.cw.updateuifromchildthread.asyncmessage.UIHandler;
 import com.cw.updateuifromchildthread.asyncmessage.WorkHandler;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Headers;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 /**
@@ -47,12 +58,16 @@ public class FullscreenActivity extends AppCompatActivity {
     private Button finishBt;
     private Button testHandlerThread;
     private Button testIntentService;
+    private Button testOkHttp;
     TextView subThreadCreateTextView;
 
     Thread mThread;
     HandlerThread handlerThread;
     Handler uiHandler;
     Handler workHandler;
+
+    private int okhttpMode = 0;  // 0: sync, 1: async
+    ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
 
     private class MyOnClickListener implements View.OnClickListener {
         @Override
@@ -109,11 +124,71 @@ public class FullscreenActivity extends AppCompatActivity {
                     break;
                 }
 
+                case R.id.testOkHttp: {
+                    if (0 == okhttpMode) {
+                        mExecutorService.submit(new Runnable() {
+                            @Override
+                            public void run() {
+                                FullscreenActivity.this.testSyncOkhttp("https://www.baidu.com/");
+                            }
+                        });
+                        ++okhttpMode;
+                    } else {
+                        FullscreenActivity.this.testAsyncOkHttp("https://www.baidu.com/");
+                        --okhttpMode;
+                    }
+                }
+                break;
+
                 default:
                     break;
             }
         }
     }
+
+    private String testSyncOkhttp(String url) {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        try {
+            Response response = okHttpClient.newCall(request).execute();
+            return response.body().string();
+        } catch (IOException e) {
+            Log.e(Constant.TAG, "onFailure: " + e.getMessage());
+        }
+
+        return null;
+    }
+
+    private void testAsyncOkHttp(String url) {
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        okHttpClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.e(Constant.TAG, "onFailure: " + e.getMessage());
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    Log.d(Constant.TAG, "onResponse: ");
+                    return;
+                }
+
+                Headers headers = response.headers();
+                for (int i = 0; i < headers.size(); i++) {
+                    Log.d(Constant.TAG, "onResponse: key/values-> " + headers.name(i) + " : " + headers.value(i));
+                }
+
+                Log.d(Constant.TAG, "onResponse: " + response.body().toString());
+            }
+        });
+    }
+
+    OkHttpClient okHttpClient = new OkHttpClient();
 
     View.OnClickListener onClickListener = new MyOnClickListener();
 
@@ -145,6 +220,9 @@ public class FullscreenActivity extends AppCompatActivity {
 
         testIntentService = findViewById(R.id.testIntentService);
         testIntentService.setOnClickListener(onClickListener);
+
+        testOkHttp = findViewById(R.id.testOkHttp);
+        testOkHttp.setOnClickListener(onClickListener);
 
         childThreadAccessView();
         noMainThreadCreateView();
