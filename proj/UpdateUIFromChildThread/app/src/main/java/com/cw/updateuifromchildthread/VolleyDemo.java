@@ -12,8 +12,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
-import static android.content.ContentValues.TAG;
-
 public class VolleyDemo {
     private RequestQueue requestQueue;
 
@@ -29,12 +27,12 @@ public class VolleyDemo {
         StringRequest stringRequest = new StringRequest("https://www.baidu.com/", new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                Log.d(TAG, "onResponse: " + response);
+                Log.d(Constant.TAG, "onResponse: " + response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "onErrorResponse: " + error.getMessage());
+                Log.e(Constant.TAG, "onErrorResponse: " + error.getMessage());
             }
         });
         getRequestQueue(context).add(stringRequest);
@@ -45,12 +43,12 @@ public class VolleyDemo {
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest("https://www.baidu.com/", null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(TAG, "onResponse: " + response);
+                Log.d(Constant.TAG, "onResponse: " + response);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(TAG, "onErrorResponse: " + error.getMessage());
+                Log.e(Constant.TAG, "onErrorResponse: " + error.getMessage());
             }
         });
         getRequestQueue(context).add(jsonObjectRequest);
