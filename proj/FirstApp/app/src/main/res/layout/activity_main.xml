@@ -73,4 +73,15 @@
         android:textAllCaps="false"
         android:text="Download redirect url zip package" />
 
+    <Button
+        android:id="@+id/exception_performance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/bt_dowload_redirect_url"
+        android:textAllCaps="false"
+        android:text="异常与性能优化" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

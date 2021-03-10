@@ -22,6 +22,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.TransactionTooLargeException;
+import android.text.format.Formatter;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     Button mBtToNextActivity;
     Button mBtSendFileToOtherProcess;
     Button mBtDownloadRedirectUrl;
+    Button exception_performance;
 
     ParcelFileDescriptor[] mFds;
 
@@ -255,6 +257,28 @@ public class MainActivity extends AppCompatActivity {
                 }).start();
             }
         });
+
+        exception_performance = findViewById(R.id.exception_performance);
+        exception_performance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dumpHeapMemory();
+            }
+        });
+    }
+
+
+    // maxMemory默认与属性dalvik.vm.heapgrowthlimit一致
+    // android:largeHeap="true", 与属性dalvik.vm.heapsize一致
+    private void dumpHeapMemory() {
+        Runtime runtime = Runtime.getRuntime();
+        long maxMemory = runtime.maxMemory();
+        long freeMemory = runtime.freeMemory();
+        long usedMemory = runtime.totalMemory() - freeMemory;
+
+        Log.d(TAG, "onClick: maxMemory: " + Formatter.formatShortFileSize(MainActivity.this, maxMemory));
+        Log.d(TAG, "onClick: freeMemory: " + Formatter.formatShortFileSize(MainActivity.this, runtime.freeMemory()));
+        Log.d(TAG, "onClick: usedMemory: " + Formatter.formatShortFileSize(MainActivity.this, usedMemory));
     }
 
     private void createPipe() {
