@@ -3,4 +3,7 @@
     <string name="thread_access_other_thread_owned_ui">线程访问非自行创建的UI Sample</string>>
     <string name="child_thread_access_ui">子线程访问创建的UI</string>>
     <string name="main_thread_access_ui">主线程访问子线程创建的UI</string>
+    <string name="title_activity_gride_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>
