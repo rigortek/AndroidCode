@@ -1,5 +1,6 @@
 package com.cw.updateuifromchildthread;
 
+import android.os.Looper;
 import android.util.Log;
 
 import java.io.IOException;
@@ -38,6 +39,9 @@ public class OkHttpDemo {
             @Override
             public void onFailure(Call call, IOException e) {
                 Log.e(Constant.TAG, "onFailure: " + e.getMessage());
+
+                // notice: 子线程中返回
+                Log.d(Constant.TAG, "onFailure: callback at child thread: " + !Thread.currentThread().equals(Looper.getMainLooper()));
             }
 
             @Override
@@ -53,6 +57,9 @@ public class OkHttpDemo {
                 }
 
                 Log.d(Constant.TAG, "onResponse: " + response.body().string());
+
+                // notice: 子线程中返回
+                Log.d(Constant.TAG, "onFailure: callback at child thread: " + !Thread.currentThread().equals(Looper.getMainLooper()));
             }
         });
     }
