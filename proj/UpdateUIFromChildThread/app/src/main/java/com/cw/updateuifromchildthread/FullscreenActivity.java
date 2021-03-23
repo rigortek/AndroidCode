@@ -12,11 +12,13 @@ import android.graphics.PixelFormat;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.os.StatFs;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -194,6 +196,33 @@ public class FullscreenActivity extends AppCompatActivity {
         noMainThreadCreateView();
 
         registerReceiver();
+
+        long freeBlockSize = getAvailSpace(Environment.getDataDirectory().getPath()) / (2 << 19);  // (1024 * 1024)
+        Log.d(Constant.TAG, "onCreate: " + freeBlockSize);
+    }
+
+    /**
+     * 根据路劲获取某个目录的可用空间
+     *
+     * @param path 文件的路径
+     * @return result 返回该目录的可用空间大小
+     */
+    private long getAvailSpace(String path) {
+        StatFs statFs = new StatFs(path);
+
+//        int JELLY_BEAN_MR2
+//        July 2013: Android 4.3, the revenge of the beans.
+//
+//        Constant Value: 18 (0x00000012)
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            long size = statFs.getBlockSizeLong();// 获取分区的大小
+            long blocks = statFs.getAvailableBlocksLong();// 获取可用分区的个数
+            return blocks * size;
+        } else {
+            long size = statFs.getBlockSize();// 获取分区的大小
+            long blocks = statFs.getAvailableBlocks();// 获取可用分区的个数
+            return blocks * size;
+        }
     }
 
     @Override

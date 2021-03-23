@@ -44,9 +44,19 @@ public class MessengerService extends Service {
 
     MessageQueue.OnFileDescriptorEventListener onFileDescriptorEventListener;
 
+//    W/System.err( 4151): java.lang.NullPointerException: onCreate fake exception for print callstack
+//    W/System.err( 4151):    at com.cw.secondapp.MessengerService.onCreate(MessengerService.java:51)
+//    W/System.err( 4151):    at android.app.ActivityThread.handleCreateService(ActivityThread.java:2761)
+//    W/System.err( 4151):    at android.app.ActivityThread.access$1800(ActivityThread.java:151)
+//    W/System.err( 4151):    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1386)
     @Override
     public void onCreate() {
         super.onCreate();
+        try {
+            throw new NullPointerException("onCreate fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
             // only for gingerbread and newer versions
@@ -159,9 +169,51 @@ public class MessengerService extends Service {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public boolean onUnbind(Intent intent) {
+        return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onRebind(Intent intent) {
+        super.onRebind(intent);
+    }
+
+//    W/System.err( 4151): java.lang.NullPointerException: onStartCommand fake exception for print callstack
+//    W/System.err( 4151):    at com.cw.secondapp.MessengerService.onStartCommand(MessengerService.java:171)
+//    W/System.err( 4151):    at android.app.ActivityThread.handleServiceArgs(ActivityThread.java:2894)
+//    W/System.err( 4151):    at android.app.ActivityThread.access$2100(ActivityThread.java:151)
+//    W/System.err( 4151):    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1401)
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        try {
+            throw new NullPointerException("onStartCommand fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+//    W/System.err( 4151): java.lang.NullPointerException: onBind fake exception for print callstack
+//    W/System.err( 4151):    at com.cw.secondapp.MessengerService.onBind(MessengerService.java:183)
+//    W/System.err( 4151):    at android.app.ActivityThread.handleBindService(ActivityThread.java:2788)
+//    W/System.err( 4151):    at android.app.ActivityThread.access$1900(ActivityThread.java:151)
+//    W/System.err( 4151):    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1391)
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+        try {
+            throw new NullPointerException("onBind fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return (null != mStubImpl) ? mStubImpl : new StubImpl();
     }
 

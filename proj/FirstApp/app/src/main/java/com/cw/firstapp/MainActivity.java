@@ -368,6 +368,9 @@ public class MainActivity extends AppCompatActivity {
         Intent service = new Intent();
         service.setFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         service.setClassName("com.cw.secondapp", "com.cw.secondapp.MessengerService");
+
+        startService(service);
+
         bindService(service, new ServiceConnection() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
             @Override
