@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -35,6 +36,8 @@ import com.cw.updateuifromchildthread.asyncmessage.HandlerThreadTest;
 import com.cw.updateuifromchildthread.asyncmessage.IntentServiceDemo;
 import com.cw.updateuifromchildthread.asyncmessage.UIHandler;
 import com.cw.updateuifromchildthread.asyncmessage.WorkHandler;
+import com.cw.updateuifromchildthread.io.NIOClient;
+import com.cw.updateuifromchildthread.io.NIOServer;
 
 
 /**
@@ -53,6 +56,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private Button testIntentService;
     private Button testOkHttp;
     private Button testVolley;
+    private Button testNIO;
     TextView subThreadCreateTextView;
 
     Thread mThread;
@@ -149,11 +153,31 @@ public class FullscreenActivity extends AppCompatActivity {
                     break;
                 }
 
+                case R.id.testNIO: {
+                    if (nioClient == null && nioServer == null) {
+                        nioServer = new NIOServer(8888);
+                        nioClient = new NIOClient("127.0.0.1", 8888);
+
+                        new Thread(nioServer).start();
+                        new Thread(nioClient).start();
+                    } else {
+                        nioClient.sendMsg("");
+                        nioClient.sendMsg("---TEST---");
+                        nioClient.sendMsg("QUIT");
+                        nioClient = null;
+                        nioServer = null;
+                    }
+                    break;
+                }
+
                 default:
                     break;
             }
         }
     }
+
+    NIOServer nioServer;
+    NIOClient nioClient;
 
     View.OnClickListener onClickListener = new MyOnClickListener();
 
@@ -191,6 +215,9 @@ public class FullscreenActivity extends AppCompatActivity {
 
         testVolley = findViewById(R.id.testVolley);
         testVolley.setOnClickListener(onClickListener);
+
+        testNIO = findViewById(R.id.testNIO);
+        testNIO.setOnClickListener(onClickListener);
 
         childThreadAccessView();
         noMainThreadCreateView();
