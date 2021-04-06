@@ -1,4 +1,4 @@
-package com.cw.updateuifromchildthread;
+package com.cw.updateuifromchildthread.retrofit;
 
 /**
  * Create by robin On 21-3-23

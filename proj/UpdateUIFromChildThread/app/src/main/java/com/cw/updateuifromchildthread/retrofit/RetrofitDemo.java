@@ -1,4 +1,4 @@
-package com.cw.updateuifromchildthread;
+package com.cw.updateuifromchildthread.retrofit;
 
 import java.io.IOException;
 import java.util.List;
@@ -7,7 +7,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-import retrofit2.Retrofit.Builder;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 // sample : https://square.github.io/retrofit/
@@ -17,8 +16,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RetrofitDemo {
     public void testSyncRetrofit() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl("https://api.github.com/")  // set url
+                .addConverterFactory(GsonConverterFactory.create())  // set date parser
+//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // set support RxJava
                 .build();
         GitHubService service = retrofit.create(GitHubService.class);
         Call<List<Repo>> repos = service.listRepos("octocat");

@@ -1,4 +1,6 @@
-package com.cw.updateuifromchildthread;
+package com.cw.updateuifromchildthread.retrofit;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * Create by robin On 21-3-16
@@ -11,7 +13,8 @@ public class Repo {
     private String nodeId;
     private String name;
     private String fullName;
-    private boolean private_;  // private???
+    @SerializedName("private")
+    private boolean privateValue;  // JSON字符串中的字段private对应Repo中的字段privateValue
     private Owner owner;
     private String htmlUrl;
     private String description;
@@ -108,11 +111,11 @@ public class Repo {
         return fullName;
     }
 
-    public void setPrivate_(boolean private_) {
-        this.private_ = private_;
+    public void setPrivateValue(boolean privateValue) {
+        this.privateValue = privateValue;
     }
-    public boolean getPrivate_() {
-        return private_;
+    public boolean getPrivateValue() {
+        return privateValue;
     }
 
     public void setOwner(Owner owner) {
