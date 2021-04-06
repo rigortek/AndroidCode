@@ -57,6 +57,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private Button testOkHttp;
     private Button testVolley;
     private Button testNIO;
+    private Button testAnr;
     TextView subThreadCreateTextView;
 
     Thread mThread;
@@ -64,6 +65,7 @@ public class FullscreenActivity extends AppCompatActivity {
     Handler uiHandler;
     Handler workHandler;
 
+    public static final String TASK_CMD_ANR = "anr";
     private int okhttpMode = 0;  // 0: sync, 1: async
     ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
     OkHttpDemo okHttpDemo;
@@ -169,7 +171,19 @@ public class FullscreenActivity extends AppCompatActivity {
                     }
                     break;
                 }
-
+                case R.id.testAnr: {
+                    ChildThreadSwitch2MainThreakTask task = new ChildThreadSwitch2MainThreakTask();
+                    synchronized (task) {
+                        task.execute(TASK_CMD_ANR);
+                        // Wait for this worker thread’s notification
+                        try {
+                            task.wait();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                }
                 default:
                     break;
             }
@@ -219,6 +233,9 @@ public class FullscreenActivity extends AppCompatActivity {
         testNIO = findViewById(R.id.testNIO);
         testNIO.setOnClickListener(onClickListener);
 
+        testAnr = findViewById(R.id.testAnr);
+        testAnr.setOnClickListener(onClickListener);
+        
         childThreadAccessView();
         noMainThreadCreateView();
 
@@ -490,11 +507,24 @@ public class FullscreenActivity extends AppCompatActivity {
                 }
             }
 
+            if (TASK_CMD_ANR.equals(params[0])) {
+                synchronized (this) {
+                    try {
+                        Log.d(Constant.TAG, "doInBackground: begin sleep, notify 5 seconds later...");
+                        TimeUnit.MILLISECONDS.sleep(6_000);
+                        notify();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
             try {
                 TimeUnit.MILLISECONDS.sleep(500);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+
 
             // 返回结果回调到onPostExecute
             return "Hello, set text by AsyncTask done.";
