@@ -38,6 +38,7 @@ import com.cw.updateuifromchildthread.asyncmessage.UIHandler;
 import com.cw.updateuifromchildthread.asyncmessage.WorkHandler;
 import com.cw.updateuifromchildthread.io.NIOClient;
 import com.cw.updateuifromchildthread.io.NIOServer;
+import com.cw.updateuifromchildthread.threadpool.ThreadPoolSample;
 
 
 /**
@@ -58,6 +59,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private Button testVolley;
     private Button testNIO;
     private Button testAnr;
+    private Button testThreadPool;
     TextView subThreadCreateTextView;
 
     Thread mThread;
@@ -184,11 +186,25 @@ public class FullscreenActivity extends AppCompatActivity {
                     }
                     break;
                 }
+
+                case R.id.testThreadPool: {
+                    mThreadPoolSample = new ThreadPoolSample();
+                    mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(1000));
+                    mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(2000));
+                    mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(3000));
+                    mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(4000));
+                    mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(5000));
+//                    mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(6000));
+//                    mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(7000));
+                    break;
+                }
                 default:
                     break;
             }
         }
     }
+
+    ThreadPoolSample mThreadPoolSample;
 
     NIOServer nioServer;
     NIOClient nioClient;
@@ -235,6 +251,9 @@ public class FullscreenActivity extends AppCompatActivity {
 
         testAnr = findViewById(R.id.testAnr);
         testAnr.setOnClickListener(onClickListener);
+
+        testThreadPool = findViewById(R.id.testThreadPool);
+        testThreadPool.setOnClickListener(onClickListener);
         
         childThreadAccessView();
         noMainThreadCreateView();
@@ -354,7 +373,7 @@ public class FullscreenActivity extends AppCompatActivity {
         layoutParams.y = 30;
 
         WindowManager windowManager = getWindowManager();
-        windowManager.addView(view, layoutParams);
+//        windowManager.addView(view, layoutParams);
     }
 
     private int methodIndex = 0;

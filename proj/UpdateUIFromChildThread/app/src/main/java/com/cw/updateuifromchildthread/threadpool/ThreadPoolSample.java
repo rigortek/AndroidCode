@@ -16,9 +16,12 @@ public class ThreadPoolSample {
 
     public ThreadPoolSample() {
         if (mUploadVoiceExecutor == null) {
-            int corePoolSize = 1;
-            int maxPoolSize = 1;
-            int queueCapacity = 1;
+//            int corePoolSize = 1;
+//            int maxPoolSize = 1;
+//            int queueCapacity = 1;
+            int corePoolSize = 2;
+            int maxPoolSize = 10;
+            int queueCapacity = 3;
             long keepAliveTime = 60L;
             mUploadVoiceExecutor = new ThreadPoolExecutor(corePoolSize, maxPoolSize,
                     keepAliveTime, TimeUnit.SECONDS,
@@ -36,8 +39,9 @@ public class ThreadPoolSample {
             return workId;
         }
 
-        public void setWorkId(int workId) {
+        public MyRunnable setWorkId(int workId) {
             this.workId = workId;
+            return this;
         }
 
         private int workId = -1;
@@ -46,7 +50,7 @@ public class ThreadPoolSample {
         public void run() {
             Log.d(Constant.TAG, "start run: " + workId);
             try {
-                TimeUnit.SECONDS.sleep(10);
+                TimeUnit.SECONDS.sleep(6);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
