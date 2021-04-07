@@ -188,7 +188,9 @@ public class FullscreenActivity extends AppCompatActivity {
                 }
 
                 case R.id.testThreadPool: {
-                    mThreadPoolSample = new ThreadPoolSample();
+                    if (mThreadPoolSample == null) {
+                        mThreadPoolSample = new ThreadPoolSample();
+                    }
                     mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(1000));
                     mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(2000));
                     mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(3000));
