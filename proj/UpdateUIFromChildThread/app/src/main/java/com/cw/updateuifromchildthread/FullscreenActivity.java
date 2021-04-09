@@ -38,6 +38,7 @@ import com.cw.updateuifromchildthread.asyncmessage.UIHandler;
 import com.cw.updateuifromchildthread.asyncmessage.WorkHandler;
 import com.cw.updateuifromchildthread.io.NIOClient;
 import com.cw.updateuifromchildthread.io.NIOServer;
+import com.cw.updateuifromchildthread.retrofit.RetrofitDemo;
 import com.cw.updateuifromchildthread.threadpool.ThreadPoolSample;
 
 
@@ -60,6 +61,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private Button testNIO;
     private Button testAnr;
     private Button testThreadPool;
+    private Button testRetrofit;
     TextView subThreadCreateTextView;
 
     Thread mThread;
@@ -200,11 +202,22 @@ public class FullscreenActivity extends AppCompatActivity {
 //                    mThreadPoolSample.execute(new ThreadPoolSample.MyRunnable().setWorkId(7000));
                     break;
                 }
+
+                case R.id.testRetrofit: {
+                    if (null == mRetrofitDemo) {
+                        mRetrofitDemo = new RetrofitDemo();
+                    }
+                    mRetrofitDemo.testSyncRetrofit();
+                    mRetrofitDemo.testAsyncRetrofit();
+                    break;
+                }
                 default:
                     break;
             }
         }
     }
+
+    RetrofitDemo mRetrofitDemo;
 
     ThreadPoolSample mThreadPoolSample;
 
@@ -256,6 +269,9 @@ public class FullscreenActivity extends AppCompatActivity {
 
         testThreadPool = findViewById(R.id.testThreadPool);
         testThreadPool.setOnClickListener(onClickListener);
+
+        testRetrofit = findViewById(R.id.testRetrofit);
+        testRetrofit.setOnClickListener(onClickListener);
         
         childThreadAccessView();
         noMainThreadCreateView();

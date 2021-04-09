@@ -2,6 +2,9 @@ package com.cw.updateuifromchildthread.retrofit;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,20 +17,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 // https://api.github.com/users/octocat/repos
 
 public class RetrofitDemo {
-    public void testSyncRetrofit() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")  // set url
-                .addConverterFactory(GsonConverterFactory.create())  // set date parser
-//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // set support RxJava
-                .build();
-        GitHubService service = retrofit.create(GitHubService.class);
-        Call<List<Repo>> repos = service.listRepos("octocat");
+    ExecutorService executorService = Executors.newSingleThreadExecutor();
 
-        try {
-            repos.execute();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void testSyncRetrofit() {
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
+                Retrofit retrofit = new Retrofit.Builder()
+                        .baseUrl("https://api.github.com/")  // set url
+                        .addConverterFactory(GsonConverterFactory.create())  // set date parser
+//                .addCallAdapterFactory(RxJavaCallAdapterFactory.create()) // set support RxJava
+                        .build();
+                GitHubService service = retrofit.create(GitHubService.class);
+                Call<List<Repo>> repos = service.listRepos("octocat");
+
+                try {
+                    repos.execute();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     public void testAsyncRetrofit() {
