@@ -69,4 +69,31 @@ public class ThreadPoolSample {
         }
     }
 
+    private void testFixedThreadPool() {
+        // 5个处理线程
+        ExecutorService executorService = Executors.newFixedThreadPool(5);
+        // 1个处理线程
+        ExecutorService singleExecutorService = Executors.newSingleThreadExecutor();
+        // N个处理线程
+        ExecutorService cacheExecutorService = Executors.newCachedThreadPool();
+
+        try {
+            // 来了10个工作请求
+            for (int i = 0; i < 10; i++) {
+                executorService.execute(()-> {
+                    Log.d(Constant.TAG, "testFixedThreadPool: new executing -> " + Thread.currentThread().getName());
+
+                    try {
+                        TimeUnit.MICROSECONDS.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                });
+            }
+
+        } catch (Exception e) {
+            executorService.shutdown();
+        }
+    }
+
 }
