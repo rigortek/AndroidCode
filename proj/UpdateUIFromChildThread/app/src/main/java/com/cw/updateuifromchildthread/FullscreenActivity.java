@@ -36,6 +36,7 @@ import com.cw.updateuifromchildthread.asyncmessage.HandlerThreadTest;
 import com.cw.updateuifromchildthread.asyncmessage.IntentServiceDemo;
 import com.cw.updateuifromchildthread.asyncmessage.UIHandler;
 import com.cw.updateuifromchildthread.asyncmessage.WorkHandler;
+import com.cw.updateuifromchildthread.deadLock.DeadLockDemo;
 import com.cw.updateuifromchildthread.io.NIOClient;
 import com.cw.updateuifromchildthread.io.NIOServer;
 import com.cw.updateuifromchildthread.retrofit.RetrofitDemo;
@@ -62,6 +63,7 @@ public class FullscreenActivity extends AppCompatActivity {
     private Button testAnr;
     private Button testThreadPool;
     private Button testRetrofit;
+    private Button testDeadLock;
     TextView subThreadCreateTextView;
 
     Thread mThread;
@@ -211,6 +213,12 @@ public class FullscreenActivity extends AppCompatActivity {
                     mRetrofitDemo.testAsyncRetrofit();
                     break;
                 }
+
+                case R.id.testDeadLock: {
+                    DeadLockDemo deadLockDemo = new DeadLockDemo();
+                    deadLockDemo.testDeadLock();
+                    break;
+                }
                 default:
                     break;
             }
@@ -272,6 +280,9 @@ public class FullscreenActivity extends AppCompatActivity {
 
         testRetrofit = findViewById(R.id.testRetrofit);
         testRetrofit.setOnClickListener(onClickListener);
+
+        testDeadLock = findViewById(R.id.testDeadLock);
+        testDeadLock.setOnClickListener(onClickListener);
         
         childThreadAccessView();
         noMainThreadCreateView();

@@ -11,139 +11,165 @@
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
-    <TextView
-        android:id="@+id/notice_changeable"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="@string/thread_access_other_thread_owned_ui"
-        android:textColor="?attr/fullscreenTextColor"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-    <Button
-        android:id="@+id/testRetrofit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@color/button_color_selector"
-        android:text="Test Thread Pool"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"/>
 
-    <Button
-        android:id="@+id/testThreadPool"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@color/button_color_selector"
-        android:text="Test Thread Pool"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"/>
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/testAnr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@color/button_color_selector"
-        android:text="Test ANR"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"/>
-    
-    <Button
-        android:id="@+id/testNIO"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@color/button_color_selector"
-        android:text="Test NIO(No blocking input/output )"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/child_thread_access_ui"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:focusable="true"
-        android:background="@drawable/imageview_selector"
-        android:text="@string/child_thread_access_ui" />
+            <TextView
+                android:id="@+id/notice_changeable"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:keepScreenOn="true"
+                android:text="@string/thread_access_other_thread_owned_ui"
+                android:textColor="?attr/fullscreenTextColor"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/main_thread_access_ui"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:focusable="true"
-        android:background="@drawable/imageview_selector"
-        android:text="@string/main_thread_access_ui"
-        android:layout_marginTop="5dp"/>
+            <Button
+                android:id="@+id/testDeadLock"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Test deadlock"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
 
-    <!-- TODO imageview_selector对Butt起仍作用, TextView, ImageView 等OK -->
-    <Button
-        android:id="@+id/child_thread_switch_to_main_thread"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="子线程切换主子线更新UI" />
+            <Button
+                android:id="@+id/testRetrofit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Test Retrofit"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
 
-    <Button
-        android:id="@+id/testHandlerThread"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@color/button_color_selector"
-        android:text="Test HandlerThread"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"/>
+            <Button
+                android:id="@+id/testThreadPool"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Test Thread Pool"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
 
-    <Button
-        android:id="@+id/finishBt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@color/button_color_selector"
-        android:text="Close Activity"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"/>
+            <Button
+                android:id="@+id/testAnr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Test ANR"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
 
-    <Button
-        android:id="@+id/testIntentService"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@color/button_color_selector"
-        android:text="Test IntentService"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"/>
+            <Button
+                android:id="@+id/testNIO"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Test NIO(No blocking input/output )"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
 
-    <Button
-        android:id="@+id/testOkHttp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@color/button_color_selector"
-        android:text="Test OkHttp"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"/>
+            <TextView
+                android:id="@+id/child_thread_access_ui"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:focusable="true"
+                android:background="@drawable/imageview_selector"
+                android:text="@string/child_thread_access_ui" />
 
-    <Button
-        android:id="@+id/testVolley"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        android:textColor="@color/button_color_selector"
-        android:text="Test Volley"
-        android:textAllCaps="false"
-        android:layout_marginTop="5dp"/>
+            <TextView
+                android:id="@+id/main_thread_access_ui"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:focusable="true"
+                android:background="@drawable/imageview_selector"
+                android:text="@string/main_thread_access_ui"
+                android:layout_marginTop="5dp"/>
+
+            <!-- TODO imageview_selector对Butt起仍作用, TextView, ImageView 等OK -->
+            <Button
+                android:id="@+id/child_thread_switch_to_main_thread"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="子线程切换主子线更新UI" />
+
+            <Button
+                android:id="@+id/testHandlerThread"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Test HandlerThread"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
+
+            <Button
+                android:id="@+id/finishBt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Close Activity"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
+
+            <Button
+                android:id="@+id/testIntentService"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Test IntentService"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
+
+            <Button
+                android:id="@+id/testOkHttp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Test OkHttp"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
+
+            <Button
+                android:id="@+id/testVolley"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:textColor="@color/button_color_selector"
+                android:text="Test Volley"
+                android:textAllCaps="false"
+                android:layout_marginTop="5dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

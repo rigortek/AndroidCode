@@ -24,7 +24,7 @@ public class ThreadPoolSample {
 //            int queueCapacity = 1;
             
             int corePoolSize = 2;
-            int maxPoolSize = 2;
+            int maxPoolSize = Runtime.getRuntime().availableProcessors() * 2 + 1;
             int queueCapacity = 2;
             long keepAliveTime = 60L;
             mUploadExecutor = new ThreadPoolExecutor(corePoolSize, maxPoolSize,
