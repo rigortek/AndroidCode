@@ -1,6 +1,7 @@
 package com.cw.derivefromlayout;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -25,17 +26,38 @@ public class LineItemView extends RelativeLayout {
     public LineItemView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
+
+        initAttribute(context, attrs);
     }
 
     public LineItemView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context);
+
+        initAttribute(context, attrs);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public LineItemView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context);
+
+        initAttribute(context, attrs);
+    }
+
+    private void initAttribute(Context context, AttributeSet attrs) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LineItemView);
+
+        String leftText = a.getString(R.styleable.LineItemView_leftText);
+        String rightText = a.getString(R.styleable.LineItemView_rightText);
+        Boolean showArrow = a.getBoolean(R.styleable.LineItemView_showArrow, false);
+
+        setTvLeftText(leftText);
+        setTvRightText(rightText);
+        setIvArrowVisibility(showArrow);
+
+        a.recycle();
+
     }
 
     private void init(Context context) {
@@ -61,12 +83,8 @@ public class LineItemView extends RelativeLayout {
         return this;
     }
 
-    public LineItemView setTvRightVisibility(boolean visibility) {
-        tvRight.setVisibility(visibility ? View.VISIBLE : View.GONE);
-        return this;
-    }
 
-    public LineItemView setIvArrayVisibility(boolean visibility) {
+    public LineItemView setIvArrowVisibility(boolean visibility) {
         ivArrow.setVisibility(visibility ? View.VISIBLE : View.GONE);
         return this;
     }

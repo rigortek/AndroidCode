@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:LineItemView="http://schemas.android.com/apk/res-auto"
     android:background="#0099cc"
     android:orientation="vertical"
     tools:context=".FullscreenActivity">
@@ -24,21 +25,32 @@
         <com.cw.derivefromlayout.LineItemView
             android:id="@+id/one"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+
+            LineItemView:leftText="First title"
+            LineItemView:rightText="First content"
+            LineItemView:showArrow="true">
 
         </com.cw.derivefromlayout.LineItemView>
 
         <com.cw.derivefromlayout.LineItemView
             android:id="@+id/two"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+
+            LineItemView:leftText="Second title"
+            LineItemView:rightText="Second content"
+            LineItemView:showArrow="false">
 
         </com.cw.derivefromlayout.LineItemView>
 
         <com.cw.derivefromlayout.LineItemView
             android:id="@+id/three"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+
+            LineItemView:leftText="Third Title, hide content"
+            LineItemView:showArrow="true">
 
         </com.cw.derivefromlayout.LineItemView>
 

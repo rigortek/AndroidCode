@@ -1,4 +1,8 @@
 <resources>
-
+    <declare-styleable name="LineItemView">
+        <attr name="leftText" format="string"></attr>
+        <attr name="rightText" format="string"></attr>
+        <attr name="showArrow" format="boolean"></attr>
+    </declare-styleable>
 
 </resources>

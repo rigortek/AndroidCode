@@ -29,11 +29,12 @@ public class FullscreenActivity extends AppCompatActivity {
         LineItemView lineItemViewThree = (LineItemView)findViewById(R.id.three);
 
 
-        lineItemViewOne.setTvLeftText("First Title").setTvRightText("First content").setIvArrayVisibility(true);
+        // 方法一：代码中设定属性
+//        lineItemViewOne.setTvLeftText("First Title").setTvRightText("First content").setIvArrowVisibility(true);
+//        lineItemViewTwo.setTvLeftText("Second Title").setTvRightText("Second content").setIvArrowVisibility(false);
+//        lineItemViewThree.setTvLeftText("Third Title, hide content").setTvRightText("").setIvArrowVisibility(true);
 
-        lineItemViewTwo.setTvLeftText("Second Title").setTvRightText("Second content").setIvArrayVisibility(false);
-
-        lineItemViewThree.setTvLeftText("Third Title, hide content").setTvRightText("").setIvArrayVisibility(true);
+        // 方法二：XML中设定属性
     }
 
     @Override
