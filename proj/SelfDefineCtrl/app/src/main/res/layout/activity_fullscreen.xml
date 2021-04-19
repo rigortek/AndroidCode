@@ -26,6 +26,7 @@
             android:id="@+id/one"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
 
             LineItemView:leftText="First title"
             LineItemView:rightText="First content"
@@ -37,6 +38,7 @@
             android:id="@+id/two"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
 
             LineItemView:leftText="Second title"
             LineItemView:rightText="Second content"
@@ -48,6 +50,7 @@
             android:id="@+id/three"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:focusable="true"
 
             LineItemView:leftText="Third Title, hide content"
             LineItemView:showArrow="true">

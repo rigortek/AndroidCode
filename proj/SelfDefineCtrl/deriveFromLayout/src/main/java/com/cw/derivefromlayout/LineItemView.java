@@ -8,12 +8,14 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
 
 public class LineItemView extends RelativeLayout {
+    public LinearLayout rootLinear;
     public TextView tvLeft;
     public TextView tvRight;
     public ImageView ivArrow;
@@ -62,6 +64,7 @@ public class LineItemView extends RelativeLayout {
 
     private void init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.line_item_layout, this);
+        rootLinear = findViewById(R.id.rootLinear);
         tvLeft = (TextView) findViewById(R.id.tvLeft);
         tvRight = (TextView) findViewById(R.id.tvRight);
         ivArrow = (ImageView) findViewById(R.id.ivArrow);
@@ -89,5 +92,20 @@ public class LineItemView extends RelativeLayout {
         return this;
     }
 
+    public void setOnClickListener(OnClickListener listener) {
+        rootLinear.setOnClickListener(listener);
+    }
+
+    public void setOnFocusChangeListener(OnFocusChangeListener listener) {
+        rootLinear.setOnFocusChangeListener(listener);
+    }
+
+    public String getLeftText() {
+        return tvLeft.getText().toString();
+    }
+
+    public String getRightText() {
+        return tvRight.getText().toString();
+    }
 
 }

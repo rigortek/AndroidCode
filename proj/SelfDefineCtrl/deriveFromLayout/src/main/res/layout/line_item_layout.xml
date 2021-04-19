@@ -2,7 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/rootLinear"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:clickable="true"
+    android:background="@drawable/line_item_selector_one">
 
     <View
         android:layout_width="match_parent"
@@ -12,9 +17,9 @@
     </View>
 
     <RelativeLayout
+        android:id="@+id/outRelative"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/line_item_selector"
         android:padding="10dp"
         android:clickable="true"
         >

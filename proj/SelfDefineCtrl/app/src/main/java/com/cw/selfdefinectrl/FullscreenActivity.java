@@ -2,7 +2,10 @@ package com.cw.selfdefinectrl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import com.cw.derivefromctrl.SubmitButton;
 import com.cw.derivefromlayout.LineItemView;
@@ -20,13 +23,22 @@ public class FullscreenActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_fullscreen);
         submitButton = findViewById(R.id.deriveFromCtrlButton);
+        final LineItemView lineItemViewOne = (LineItemView)findViewById(R.id.one);
+        final LineItemView lineItemViewTwo = (LineItemView)findViewById(R.id.two);
+        final LineItemView lineItemViewThree = (LineItemView)findViewById(R.id.three);
+
+
         if (null != submitButton) {
             submitButton.setText("No default text");
+            submitButton.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus) {
+                        Toast.makeText(FullscreenActivity.this, "Button gain focus", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
-
-        LineItemView lineItemViewOne = (LineItemView)findViewById(R.id.one);
-        LineItemView lineItemViewTwo = (LineItemView)findViewById(R.id.two);
-        LineItemView lineItemViewThree = (LineItemView)findViewById(R.id.three);
 
 
         // 方法一：代码中设定属性
@@ -35,6 +47,76 @@ public class FullscreenActivity extends AppCompatActivity {
 //        lineItemViewThree.setTvLeftText("Third Title, hide content").setTvRightText("").setIvArrowVisibility(true);
 
         // 方法二：XML中设定属性
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+        setOnClickListener(lineItemViewOne, lineItemViewTwo, lineItemViewThree);
+        setOnFocusChangeListener(lineItemViewOne, lineItemViewTwo, lineItemViewThree);
+
+        ////////////////////////////////////////////////////////////////////////////////////////
+    }
+
+    private void setOnFocusChangeListener(final LineItemView lineItemViewOne,
+                                          final LineItemView lineItemViewTwo,
+                                          final LineItemView lineItemViewThree) {
+
+        lineItemViewOne.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    String notice = "item 1 gain focus";
+                    Toast.makeText(FullscreenActivity.this, notice, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        lineItemViewTwo.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    String notice = "item 2 gain focus";
+                    Toast.makeText(FullscreenActivity.this, notice, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        lineItemViewThree.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            private Drawable drawable;
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    String notice = "item 3 gain focus";
+                    Toast.makeText(FullscreenActivity.this, notice, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void setOnClickListener(final LineItemView lineItemViewOne,
+                                    final LineItemView lineItemViewTwo,
+                                    final LineItemView lineItemViewThree) {
+        lineItemViewOne.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(FullscreenActivity.this,
+                        lineItemViewOne.getLeftText()  + " : " + lineItemViewOne.getRightText(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        lineItemViewTwo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(FullscreenActivity.this,
+                        lineItemViewTwo.getLeftText()  + " : " + lineItemViewTwo.getRightText(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        lineItemViewThree.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(FullscreenActivity.this,
+                        lineItemViewThree.getLeftText()  + " : " + lineItemViewThree.getRightText(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
