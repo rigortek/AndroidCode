@@ -1,3 +1,4 @@
+include ':deriveFromView'
 include ':deriveFromLayout'
 include ':deriveFromCtrl'
 include ':app'
