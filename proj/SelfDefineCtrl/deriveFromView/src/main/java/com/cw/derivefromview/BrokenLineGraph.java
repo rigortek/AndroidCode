@@ -1,4 +1,4 @@
-package com.cw.derivefromlayout;
+package com.cw.derivefromview;
 
 import android.content.Context;
 import android.os.Build;

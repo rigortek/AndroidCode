@@ -32,5 +32,6 @@ dependencies {
 
     implementation project(':deriveFromCtrl')
     implementation project(':deriveFromLayout')
+    implementation project(':deriveFromView')
 
 }

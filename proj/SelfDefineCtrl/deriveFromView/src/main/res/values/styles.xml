@@ -1,0 +1,12 @@
+<resources>
+    <declare-styleable name="Olympic5Circles">
+        <attr name="circleRadius" format="integer"></attr>
+
+        <attr name="firstCircleColor" format="color"></attr>
+        <attr name="secondCircleColor" format="color"></attr>
+        <attr name="thirdCircleColor" format="color"></attr>
+        <attr name="fourCircleColor" format="color"></attr>
+        <attr name="fiveCircleColor" format="color"></attr>
+    </declare-styleable>
+
+</resources>

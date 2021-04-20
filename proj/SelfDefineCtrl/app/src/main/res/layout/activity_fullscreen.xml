@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:LineItemView="http://schemas.android.com/apk/res-auto"
+    xmlns:Olympic5Circles="http://schemas.android.com/apk/res-auto"
     android:background="#0099cc"
     android:orientation="vertical"
     tools:context=".FullscreenActivity">
@@ -57,6 +58,34 @@
 
         </com.cw.derivefromlayout.LineItemView>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <com.cw.derivefromview.Olympic5Circles
+            android:id="@+id/firstCycle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            Olympic5Circles:firstCircleColor="@color/black"
+            Olympic5Circles:secondCircleColor="@color/red"
+            Olympic5Circles:thirdCircleColor="@color/blue"
+            Olympic5Circles:fourCircleColor="@color/green"
+            Olympic5Circles:fiveCircleColor="@color/yellow"
+            android:layout_weight="1">
+
+        </com.cw.derivefromview.Olympic5Circles>
+
+        <com.cw.derivefromview.Olympic5Circles
+            android:id="@+id/secondCycle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            Olympic5Circles:circleRadius="80"
+            android:layout_weight="1">
+
+        </com.cw.derivefromview.Olympic5Circles>
     </LinearLayout>
 
 </LinearLayout>
