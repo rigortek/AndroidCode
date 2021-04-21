@@ -68,7 +68,7 @@ public class Olympic5Circles extends View {
     private void initAttribute(Context context, AttributeSet attrs) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Olympic5Circles);
 
-        radius = a.getInt(R.styleable.Olympic5Circles_circleRadius, 60);
+        radius = a.getInt(R.styleable.Olympic5Circles_circleRadius, 50);
         firstCircleColor = a.getColor(R.styleable.Olympic5Circles_firstCircleColor, Color.BLUE);
         secondCircleColor = a.getColor(R.styleable.Olympic5Circles_secondCircleColor, Color.BLACK);
         thirdCircleColor = a.getColor(R.styleable.Olympic5Circles_thirdCircleColor, Color.RED);
