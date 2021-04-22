@@ -78,6 +78,7 @@ public class Olympic5Circles extends View {
         a.recycle();
 
     }
+
     private Paint createPaint(int color){
         Paint paint = new Paint();
 

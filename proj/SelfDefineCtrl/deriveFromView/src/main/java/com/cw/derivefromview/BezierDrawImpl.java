@@ -14,9 +14,10 @@ import java.util.List;
 public class BezierDrawImpl implements IDrawMethod {
 
     private Path mAllPath;
+    private int color;
 
     @Override
-    public void offerPoints(List<PointF> pointFList) {
+    public IDrawMethod supplyPoints(List<PointF> pointFList) {
         pointFList.add(0, new PointF(pointFList.get(0).x, pointFList.get(0).y));
         pointFList.add(new PointF(pointFList.get(pointFList.size() - 1).x,
                 pointFList.get(pointFList.size() - 1).y));
@@ -33,12 +34,19 @@ public class BezierDrawImpl implements IDrawMethod {
             mAllPath.cubicTo(ctrlPointA.x, ctrlPointA.y, ctrlPointB.x, ctrlPointB.y,
                     pointFList.get(i + 1).x, pointFList.get(i + 1).y);
         }
+        return this;
+    }
+
+    @Override
+    public IDrawMethod supplylineColor(int color) {
+        this.color = color;
+        return this;
     }
 
     @Override
     public void drawPoints(Canvas canvas, List<PointF> pointList) {
         Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
+        paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true);
         paint.setStrokeWidth(3);

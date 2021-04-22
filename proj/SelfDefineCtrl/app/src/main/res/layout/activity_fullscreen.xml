@@ -5,9 +5,43 @@
     android:layout_height="match_parent"
     xmlns:LineItemView="http://schemas.android.com/apk/res-auto"
     xmlns:Olympic5Circles="http://schemas.android.com/apk/res-auto"
+    xmlns:BrokenLineGraph="http://schemas.android.com/apk/res-auto"
     android:background="#0099cc"
     android:orientation="vertical"
     tools:context=".FullscreenActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.cw.derivefromctrl.SubmitButton
+            android:id="@+id/deriveFromCtrlButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            >
+        </com.cw.derivefromctrl.SubmitButton>
+
+        <com.cw.derivefromview.BrokenLineGraph
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            BrokenLineGraph:xyColor="@color/red"
+            BrokenLineGraph:lineColor="@color/blue"
+            BrokenLineGraph:algorithm="0"
+            android:layout_weight="1">
+
+        </com.cw.derivefromview.BrokenLineGraph>
+
+        <com.cw.derivefromview.BrokenLineGraph
+            android:layout_width="wrap_content"
+            android:layout_height="200dp"
+            BrokenLineGraph:xyColor="@color/dark_blue"
+            BrokenLineGraph:lineColor="@color/dark_orange"
+            BrokenLineGraph:algorithm="1"
+            android:layout_weight="1">
+
+        </com.cw.derivefromview.BrokenLineGraph>
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/fullscreen_content_controls"
@@ -16,12 +50,6 @@
         android:background="@color/black_overlay"
         android:orientation="vertical"
         android:gravity="center">
-
-        <com.cw.derivefromctrl.SubmitButton
-            android:id="@+id/deriveFromCtrlButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-        </com.cw.derivefromctrl.SubmitButton>
 
         <com.cw.derivefromlayout.LineItemView
             android:id="@+id/one"
@@ -64,20 +92,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-        <com.cw.derivefromview.BrokenLineGraph
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_weight="1">
-
-        </com.cw.derivefromview.BrokenLineGraph>
-
-        <com.cw.derivefromview.BrokenLineGraph
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_weight="1">
-
-        </com.cw.derivefromview.BrokenLineGraph>
 
         <com.cw.derivefromview.Olympic5Circles
             android:id="@+id/firstCycle"

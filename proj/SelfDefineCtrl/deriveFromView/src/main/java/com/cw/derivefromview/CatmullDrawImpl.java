@@ -5,6 +5,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 
+import java.security.InvalidParameterException;
 import java.util.List;
 
 /**
@@ -14,19 +15,27 @@ import java.util.List;
 public class CatmullDrawImpl implements IDrawMethod {
 
     private Path mAllPath;
+    private int color;
 
     @Override
-    public void offerPoints(List<PointF> pointFList) {
+    public IDrawMethod supplylineColor(int color) {
+        this.color = color;
+        return this;
+    }
+
+    @Override
+    public IDrawMethod supplyPoints(List<PointF> pointFList) {
         if (pointFList == null || pointFList.size() < 2) {
-            return ;
+            throw new InvalidParameterException("invalid points");
         }
         mAllPath = savePathCatmullRom(pointFList);
+        return this;
     }
 
     @Override
     public void drawPoints(Canvas canvas, List<PointF> pointList) {
         Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
+        paint.setColor(color);
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true);
         paint.setStrokeWidth(3);

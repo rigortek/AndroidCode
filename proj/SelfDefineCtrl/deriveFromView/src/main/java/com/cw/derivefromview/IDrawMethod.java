@@ -12,7 +12,8 @@ import java.util.List;
 
 public interface IDrawMethod {
 
-    void offerPoints(List<PointF> pointFS);
+    IDrawMethod supplyPoints(List<PointF> pointFS);
+    IDrawMethod supplylineColor(int color);
 
     void drawPoints(Canvas canvas, List<PointF> pointFS);
 

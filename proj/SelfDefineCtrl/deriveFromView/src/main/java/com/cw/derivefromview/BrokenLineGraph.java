@@ -1,6 +1,7 @@
 package com.cw.derivefromview;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -23,6 +24,15 @@ public class BrokenLineGraph extends View {
     IDrawMethod iDrawMethod = null;
     List<PointF> pointFList = new ArrayList<>();
 
+
+    private static final int METHOD_CATMULL = 0;
+    private static final int METHOD_BEZIER = 1;
+
+    private int algorithm = 0;
+
+    private int xyColor = Color.BLUE;
+    private int lineColor = Color.BLACK;
+
     public BrokenLineGraph(Context context) {
         super(context);
         initDrawMethod();
@@ -30,18 +40,31 @@ public class BrokenLineGraph extends View {
 
     public BrokenLineGraph(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        initAttribute(context, attrs);
         initDrawMethod();
     }
 
     public BrokenLineGraph(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initAttribute(context, attrs);
         initDrawMethod();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public BrokenLineGraph(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        initAttribute(context, attrs);
         initDrawMethod();
+    }
+
+    private void initAttribute(Context context, AttributeSet attrs) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.BrokenLineGraph);
+
+        algorithm = a.getInt(R.styleable.BrokenLineGraph_algorithm, 0);
+        xyColor = a.getColor(R.styleable.BrokenLineGraph_xyColor, Color.BLUE);
+        lineColor = a.getColor(R.styleable.BrokenLineGraph_lineColor, Color.BLACK);
+
+        a.recycle();
     }
 
     private List<PointF> preparePoints(List<PointF> pointFList) {
@@ -88,9 +111,14 @@ public class BrokenLineGraph extends View {
     }
 
     private void initDrawMethod() {
-//        iDrawMethod = new BezierDrawImpl();
-        iDrawMethod = new CatmullDrawImpl();
-        iDrawMethod.offerPoints(preparePoints(pointFList));
+        if (METHOD_BEZIER == algorithm) {
+            iDrawMethod = new CatmullDrawImpl();
+        } else {
+            iDrawMethod = new BezierDrawImpl();
+        }
+
+        iDrawMethod.supplyPoints(preparePoints(pointFList));
+        iDrawMethod.supplylineColor(lineColor);
     }
 
     @Override
@@ -103,7 +131,7 @@ public class BrokenLineGraph extends View {
 
     private void drawXYLine(Canvas canvas) {
         Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
+        paint.setColor(xyColor);
         paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true);
         paint.setStrokeWidth(3);

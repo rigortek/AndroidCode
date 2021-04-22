@@ -9,4 +9,11 @@
         <attr name="fiveCircleColor" format="color"></attr>
     </declare-styleable>
 
+    <declare-styleable name="BrokenLineGraph">
+        <attr name="algorithm" format="integer"></attr>
+
+        <attr name="xyColor" format="color"></attr>
+        <attr name="lineColor" format="color"></attr>
+    </declare-styleable>
+
 </resources>
