@@ -13,17 +13,20 @@
 
 class c11_14 {
 public:
-	c11_14(int value);
+	c11_14();
+	c11_14(int value, char* pValue);
 	virtual ~c11_14();
 	c11_14(const c11_14 &other);
-	c11_14(c11_14 &&other);
-//	c11_14& operator=(const c11_14 &other);
-//	c11_14& operator=(c11_14 &&other);
+//	c11_14(c11_14 &&other);  // move拷贝构造函数
+	c11_14& operator=(const c11_14 &other);
+//	c11_14& operator=(c11_14 &&other); // move赋值构造函数
 
 	c11_14 get();
 
 private:
 	int dataMember;
+
+	char* pBuffer;
 };
 
 #endif /* C11_14_H_ */
