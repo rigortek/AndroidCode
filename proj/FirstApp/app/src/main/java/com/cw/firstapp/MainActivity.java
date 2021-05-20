@@ -450,6 +450,9 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         Log.d(TAG, "onResume: MainActivity");
+
+//        ThreadPoolTest threadPoolTest = new ThreadPoolTest();
+//        threadPoolTest.testSelfDefineThreadPool();
     }
 
     @Override
