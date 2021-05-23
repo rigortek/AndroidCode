@@ -76,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
 
 //        getContentResolver().call(Uri.parse("content://businessprovider.authorities"), "invoke", null, null);
+
+//        ApkExtracter.copyApk(getApplicationContext(), getExternalCacheDir().getAbsolutePath(), "com.cw.firstapp");
     }
 
 }
