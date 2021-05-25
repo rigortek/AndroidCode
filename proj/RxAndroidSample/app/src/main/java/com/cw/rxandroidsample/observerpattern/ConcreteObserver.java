@@ -6,7 +6,7 @@ import android.util.Log;
  * Create by robin On 20-11-27
  * 观察者实现类
  */
-public class ConcreteObserver implements Observer {
+public class ConcreteObserver implements LtObserver {
     public static final String TAG = "JCW";
     private String name;
 

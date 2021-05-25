@@ -8,26 +8,26 @@ import java.util.List;
  * Create by robin On 20-11-27
  * 被观察者实现类
  */
-public class ConcreteObserverable implements Observerable {
-    private List<Observer> observers = Collections.synchronizedList(new ArrayList<>());
+public class ConcreteObserverable implements LtObserverable {
+    private List<LtObserver> observers = Collections.synchronizedList(new ArrayList<>());
     int currentState;
 
     @Override
-    public void registerObserver(Observer observer) {
+    public void registerObserver(LtObserver observer) {
         if (!observers.contains(observer)) {
             observers.add(observer);
         }
     }
 
     @Override
-    public void removeObserver(Observer observer) {
+    public void removeObserver(LtObserver observer) {
         observers.remove(observer);
     }
 
     @Override
     public void notifyObservers(Object object) {
 
-        for (Observer observer:
+        for (LtObserver observer:
              observers) {
             switch (currentState) {
                 case 0:
