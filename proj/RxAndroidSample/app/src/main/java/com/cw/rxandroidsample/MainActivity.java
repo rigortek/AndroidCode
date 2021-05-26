@@ -21,5 +21,12 @@ public class MainActivity extends AppCompatActivity {
 
         RxJavaSample sample = new RxJavaSample();
         sample.doRxJava();
+
+
+        RxJavaOperatorSample rxJavaOperatorSample = new RxJavaOperatorSample();
+        rxJavaOperatorSample.mapOperator_String2Bitmap();
+        rxJavaOperatorSample.mapOperator_StringList2BitmapList();
+//        rxJavaOperatorSample.flatMapOperator();
+
     }
 }

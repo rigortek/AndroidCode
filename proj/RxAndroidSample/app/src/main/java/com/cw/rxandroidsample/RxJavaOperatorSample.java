@@ -21,13 +21,31 @@ import static com.cw.rxandroidsample.MainActivity.TAG;
  */
 public class RxJavaOperatorSample {
 
-    public void mapOperator() {
+    // map操作符测试
+    public void mapOperator_String2Bitmap() {
+         // 目的就是将路径String > Bitmap
+        Observable.just("raw/test.png").map(new Function<String, Bitmap>() {
+            @Override
+            public Bitmap apply(@NotNull String strings) throws Exception {
+                // 生成Bitmap
+                return BitmapFactory.decodeFile(strings);  // just for test
+            }
+        }).subscribe(new Consumer<Bitmap >() {
+            // 消费Bitmap
+            @Override
+            public void accept(Bitmap bitmap) throws Exception {
+                Log.d(TAG, "accept: " + bitmap);
+            }
+        });
+    }
+
+    public void mapOperator_StringList2BitmapList() {
         List<String> parameters = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
             parameters.add("i");
         }
 
-        // 目的就是将路径String 转换-> Bitmap
+        // 目的就是将路径String List > Bitmap List
         Observable.just(parameters).map(new Function<List<String>, List<Bitmap> >() {
             @Override
             public List<Bitmap> apply(@NotNull List<String> strings) throws Exception {
@@ -48,4 +66,28 @@ public class RxJavaOperatorSample {
             }
         });
     }
+
+    // flatMap操作符测试
+    // map操作符测试
+    public void flatMapOperator() {
+        // 目的就是将路径String > Bitmap
+        Observable.just("https://www.sina.com.cn",
+                "https://www.baidu.com",
+                "https://www.sohu.com").flatMap(new Function<String, Observable<String>>() {
+            @Override
+            public Observable<String> apply(@NotNull String s) throws Exception {
+                return createObservable(s);
+            }
+        }).subscribe(new Consumer<String>() {
+            @Override
+            public void accept(String s) throws Exception {
+                Log.d(TAG, "accept: " + s);
+            }
+        });
+    }
+
+    private Observable createObservable(String str) {
+        return null;
+    }
+
 }
