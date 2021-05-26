@@ -24,9 +24,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         RxJavaOperatorSample rxJavaOperatorSample = new RxJavaOperatorSample();
-        rxJavaOperatorSample.mapOperator_String2Bitmap();
-        rxJavaOperatorSample.mapOperator_StringList2BitmapList();
-//        rxJavaOperatorSample.flatMapOperator();
+//        rxJavaOperatorSample.mapOperator_String2Bitmap(this);
+//        rxJavaOperatorSample.mapOperator_StringList2BitmapList(this);
+        rxJavaOperatorSample.flatMapOperator();
 
     }
 }
