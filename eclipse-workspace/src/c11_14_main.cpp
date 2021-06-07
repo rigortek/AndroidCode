@@ -11,6 +11,7 @@
 #include <bitset>
 
 #include "c11_14.h"
+#include "SharedPtrSample.h"
 
 using namespace std;
 
@@ -33,6 +34,37 @@ void printY(const Types&...args) {
 	cout << sizeof...(args) << endl;
 }
 
+int sharedPtrTest() {
+	  shared_ptr<A> a(new A(1));
+	  shared_ptr<A> b(a), c(a), d(a);
+
+	  cout << "a: " << a->a << "\tb: " << b->a
+	     << "\tc: " << c->a << "\td: " << d->a << endl;
+
+	  // reset之后，不会改变a,b,c的值
+	  d.reset(new A(10));
+
+	  cout << "a: " << a->a << "\tb: " << b->a
+	     << "\tc: " << c->a << "\td: " << d->a << endl;
+
+	  return 0;
+}
+
+void testCyclicSharedPtr() {
+//	FirstClass* pFirst = new FirstClass(1);
+//	SecondClass* pSecond = new SecondClass(2);
+
+	std::shared_ptr<FirstClass> first = std::make_shared<FirstClass>(1);
+	cout << "----------------------->1" << endl;
+	std::shared_ptr<SecondClass> second = std::make_shared<SecondClass>(2);
+	cout << "----------------------->2" << endl;
+
+	first->mSecondClassPtr = second;
+	cout << "----------------------->3" << endl;
+	second->mFirstClassPtr = first;
+	cout << "----------------------->4" << endl;
+}
+
 int main() {
 #if 0
 	c11_14 tmp1(1, "first");
@@ -51,8 +83,14 @@ int main() {
 	delete pInstance;
 #endif
 
+#if 0
 //	printX(7.5, "hello", bitset<16>(377), 42);
 	printY(7.5, "hello", bitset<16>(377), 42);
+#endif
+
+//	sharedPtrTest();
+
+	testCyclicSharedPtr();
 
 	return 0;
 }
