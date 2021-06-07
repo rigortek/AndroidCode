@@ -1,3 +1,6 @@
+#ifndef SHARED_PTR_H_
+#define SHARED_PTR_H_
+
 #include <memory>
 #include <iostream>
 
@@ -66,4 +69,6 @@ class SecondClass {
     //std::shared_ptr<FirstClass> mFirstClassPtr;
     std::weak_ptr<FirstClass> mFirstClassPtr;
 };
+#endif
+
 #endif

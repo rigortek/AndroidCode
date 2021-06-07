@@ -54,9 +54,14 @@ void testCyclicSharedPtr() {
 //	FirstClass* pFirst = new FirstClass(1);
 //	SecondClass* pSecond = new SecondClass(2);
 
-	std::shared_ptr<FirstClass> first = std::make_shared<FirstClass>(1);
+	// 如果直接传递参数值1，某些平台上会触发编译错误-》 error: no matching function for call to 'make_shared'
+	// std::shared_ptr<FirstClass> first = std::make_shared<FirstClass>(1);
+	int firstValue = 1;
+	std::shared_ptr<FirstClass> first = std::make_shared<FirstClass>(firstValue);
 	cout << "----------------------->1" << endl;
-	std::shared_ptr<SecondClass> second = std::make_shared<SecondClass>(2);
+	// std::shared_ptr<SecondClass> second = std::make_shared<SecondClass>(2);  // error: no matching function for call to 'make_shared'
+	int secondValue = 2;
+	std::shared_ptr<SecondClass> second = std::make_shared<SecondClass>(secondValue);
 	cout << "----------------------->2" << endl;
 
 	first->mSecondClassPtr = second;
