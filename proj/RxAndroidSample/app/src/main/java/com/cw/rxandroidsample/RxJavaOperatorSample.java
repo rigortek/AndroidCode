@@ -122,7 +122,7 @@ public class RxJavaOperatorSample {
         return Observable.create(new ObservableOnSubscribe<String>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<String> emitter) throws Exception {
-                InetAddress address = InetAddress.getByName("www.google.com");
+                InetAddress address = InetAddress.getByName(str);
                 String ip = address.getHostAddress();
                 emitter.onNext(ip);
 
