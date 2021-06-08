@@ -3,6 +3,8 @@ package com.cw.secondapp.SerializableParcelable;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+// java.lang.RuntimeException:
+// Parcelable encountered IOException writing serializable object (name = com.cw.secondapp.SerializableParcelable.SerializableObjects)
 public class SerializableObjects implements Serializable {
     private String name;
     private int age;

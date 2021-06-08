@@ -8,8 +8,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import com.cw.secondapp.SerializableParcelable.ParcelableObjects;
+import com.cw.secondapp.SerializableParcelable.SerializableObjects;
+
+import java.io.Serializable;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -129,6 +136,40 @@ public class SecondActivity extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.startMediaTestActivityBt).setOnTouchListener(mDelayHideTouchListener);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Intent intent = getIntent();
+
+        if (intent.hasExtra("serialzable_one")) {
+            SerializableObjects serializable = (SerializableObjects) intent.getSerializableExtra("serialzable_one");
+            if (null != serializable) {
+                Log.d(MainActivity.TAG, "onCreate: " + serializable.getName()
+                        + "/" + serializable.getAge()
+                        + "/" + serializable.getAddress());
+            }
+        }
+
+        if (intent.hasExtra("serializable_second")) {
+            SerializableObjects serializable = (SerializableObjects)intent.getSerializableExtra("serializable_second");
+            if (null != serializable) {
+                Log.d(MainActivity.TAG, "onCreate: " + serializable.getName()
+                        + "/" + serializable.getAge()
+                        + "/" + serializable.getAddress());
+            }
+        }
+
+        if (intent.hasExtra("parcelable")) {
+            Parcelable parcelable = intent.getParcelableExtra("parcelable");
+            if (null != parcelable) {
+                Log.d(MainActivity.TAG, "onCreate: " + ((ParcelableObjects) parcelable).getName()
+                        + "/" + ((ParcelableObjects) parcelable).getAge()
+                        + "/" + ((ParcelableObjects) parcelable).getAddress());
+            }
+        }
     }
 
     @Override

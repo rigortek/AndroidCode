@@ -19,8 +19,8 @@ public class ParcelableObjects implements Parcelable {
     }
 
     protected ParcelableObjects(Parcel in) {
-        age = in.readInt();
         name = in.readString();
+        age = in.readInt();
         address = in.createStringArrayList();
     }
 

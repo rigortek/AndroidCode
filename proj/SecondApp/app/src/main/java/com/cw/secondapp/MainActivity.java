@@ -6,17 +6,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
+import android.os.Parcelable;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.cw.secondapp.SerializableParcelable.ParcelableObjects;
+import com.cw.secondapp.SerializableParcelable.SerializableObjects;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static final String TAG = "jcw";
@@ -31,13 +34,62 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         intent.setAction(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
 //        intent.setClassName(getPackageName(), SecondActivity.class.getName());
-        intent.setClassName("com.cw.thirdsystemapp", "com.cw.thirdsystemapp.FullscreenActivity");
+        testSerizableAndParcelable(intent);
+
+//        intent.setClassName("com.cw.thirdsystemapp", "com.cw.thirdsystemapp.FullscreenActivity");
+        intent.setClassName(getPackageName(), "com.cw.secondapp.SecondActivity");
         // 方式一
         startActivity(intent);
 //        // 方式二
 //        startActivityForResult(intent, 1);
 //        // 方式三
 //        getApplicationContext().startActivity(intent);
+    }
+
+    private void testSerizableAndParcelable(Intent intent) {
+        // Serializable传值，方式一：
+        ArrayList arrayList = new ArrayList<String>();
+        arrayList.add("pudong");
+        arrayList.add("changni");
+        arrayList.add("nanghui");
+//        Serializable serializable = new SerializableObjects("shanghai", 70, arrayList);
+        Serializable serializable = new SerializableObjects("shanghai", 70,
+                new ArrayList<String>(Arrays.asList("changsha", "zhuzhou", "xiantang")));
+
+//        TODO 下面这种初始化方式不行，会导致异常，原因待查，怀疑是初始化问题
+//        java.lang.RuntimeException:
+//        Parcelable encountered IOException writing serializable object (name = com.cw.secondapp.SerializableParcelable.SerializableObjects)
+
+//        Serializable serializable = new SerializableObjects("shanghai", 70, new ArrayList<String>() {
+//            {
+//                add("changsha");
+//                add("zhuzhou");
+//                add("xiantang");
+//            }
+//        });
+        intent.putExtra("serializable_second", serializable);
+
+        /**************************************************************/
+        // Serializable传值，方式二：
+        ArrayList arrayList2 = new ArrayList<String>();
+        arrayList2.add("jiading");
+        arrayList2.add("jingshang");
+        arrayList2.add("chongming");
+        Serializable serializable2 = new SerializableObjects("shanghai2", 70, arrayList2);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("serialzable_one", serializable2);
+        intent.putExtras(bundle);
+        /**************************************************************/
+
+        // Parcelable传值
+        Parcelable parcelable = new ParcelableObjects("hunan", 500, new ArrayList<String>() {
+            {
+                add("changsha");
+                add("zhuzhou");
+                add("xiantang");
+            }
+        });
+        intent.putExtra("parcelable", parcelable);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
