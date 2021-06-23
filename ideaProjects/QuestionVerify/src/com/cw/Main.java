@@ -2,18 +2,21 @@ package com.cw;
 
 import com.cw.agora.BTreeSample;
 import com.cw.agora.Node;
+import com.cw.nio.BinarySearchSample;
 
 public class Main {
 
     public static void main(String[] args) {
 	// write your code here
 
+        BinarySearchSample.search();
 
-        Money income = new Money(55, "USD");
-        Money expenses = new Money(55, "USD");
-        System.out.println(income + " equals " + expenses + " ? " + income.equals(expenses));  // false
+//        Money income = new Money(55, "USD");
+//        Money expenses = new Money(55, "USD");
+//        System.out.println(income + " equals " + expenses + " ? " + income.equals(expenses));  // false
 
-        testBtree();
+
+//        testBtree();
     }
 
     private static void testBtree() {
