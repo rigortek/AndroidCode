@@ -1,5 +1,6 @@
 package com.cw.secondapp;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -39,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        intent.setClassName("com.cw.thirdsystemapp", "com.cw.thirdsystemapp.FullscreenActivity");
         intent.setClassName(getPackageName(), "com.cw.secondapp.SecondActivity");
         // 方式一
-        startActivity(intent);
+//        startActivity(intent);
 //        // 方式二
-//        startActivityForResult(intent, 1);
+        startActivityForResult(intent, 1);
 //        // 方式三
 //        getApplicationContext().startActivity(intent);
     }
@@ -132,4 +133,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        ApkExtracter.copyApk(getApplicationContext(), getExternalCacheDir().getAbsolutePath(), "com.cw.firstapp");
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        try {
+            throw new NullPointerException("onActivityResult fake exception for print callstack");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d(TAG, "onActivityResult: " + "requestCode: " + requestCode + ", resultCode: " + resultCode);
+    }
 }

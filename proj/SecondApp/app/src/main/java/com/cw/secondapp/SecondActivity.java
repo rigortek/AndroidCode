@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -136,6 +137,10 @@ public class SecondActivity extends AppCompatActivity {
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
         findViewById(R.id.startMediaTestActivityBt).setOnTouchListener(mDelayHideTouchListener);
+
+        // 无法获取到startActivityResult中的requestCode，但是可以获取调用者是谁。
+        ComponentName componentName = getCallingActivity();
+        Log.d(MainActivity.TAG, "onCreate: getCallingActivity -> " + componentName.getPackageName() + "/" + getCallingActivity());
     }
 
     @Override
@@ -222,5 +227,16 @@ public class SecondActivity extends AppCompatActivity {
     private void delayedHide(int delayMillis) {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(1000);
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }
