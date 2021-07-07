@@ -20,11 +20,11 @@ public class GloabKeyLinstenService extends AccessibilityService {
         Log.d(TAG, "onCreate: ***********************************" + this);
         super.onCreate();
 
-        if (!isAccessibilitySettingsOn(getApplicationContext(), GloabKeyLinstenService.class)) {
-            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        }
+//        if (!isAccessibilitySettingsOn(getApplicationContext(), GloabKeyLinstenService.class)) {
+//            Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+//            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(intent);
+//        }
     }
 
     @Override

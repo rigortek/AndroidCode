@@ -17,6 +17,10 @@ public class Main {
 
 
 //        testBtree();
+
+
+        SynchronizedSample synchronizedSample = new SynchronizedSample();
+        synchronizedSample.testMultiThread();
     }
 
     private static void testBtree() {

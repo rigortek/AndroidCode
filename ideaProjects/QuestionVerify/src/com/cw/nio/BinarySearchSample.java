@@ -15,7 +15,7 @@ public class BinarySearchSample {
         }
         int target = 9;
 
-        System.out.printf("find index: " + search(nums, target));
+        System.out.println("find index: " + search(nums, target));
 
     }
 
