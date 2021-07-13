@@ -1,6 +1,7 @@
-package com.cw;
+package com.cw.app;
 
 import android.accessibilityservice.AccessibilityService;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.provider.Settings;
@@ -25,6 +26,21 @@ public class GloabKeyLinstenService extends AccessibilityService {
 //            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            startActivity(intent);
 //        }
+
+//        startGloabKeyLinstener(this);
+    }
+
+    public void startGloabKeyLinstener(Context context) {
+        String enabled = Settings.Secure.getString(context.getContentResolver(),
+                "enabled_accessibility_services");
+        String localAccessibilityService = new ComponentName(context.getPackageName(),
+                "com.cw.app.GloabKeyLinstenService").flattenToString();
+
+        if (!("1".equals(enabled)) || (!enabled.contains(localAccessibilityService))) {
+            Settings.Secure.putInt(context.getContentResolver(), "accessibility_enabled", 1);
+            Settings.Secure.putString(context.getContentResolver(),
+                    "enabled_accessibility_services", localAccessibilityService);
+        }
     }
 
     @Override

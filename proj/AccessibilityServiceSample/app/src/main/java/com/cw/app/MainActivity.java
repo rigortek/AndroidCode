@@ -8,7 +8,13 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.RelativeLayout;
 
-import com.cw.GloabKeyLinstenService;
+import java.io.IOException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Enumeration;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "jcw";
@@ -17,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.istvactivity);
+        setContentView(R.layout.activity_main);
         mRelativeLayout = new RelativeLayout(this);
         Log.d(TAG, "---------- onCreate: ---------- " + mRelativeLayout);
 
@@ -38,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         Log.d(TAG, "---------- onKeyDown: ---------- " + keyCode);
+
+        printInstalledCertificates();
 
         return super.onKeyDown(keyCode, event);
     }
@@ -76,5 +84,59 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         Log.d(TAG, "---------- onDestroy: ---------- " + mRelativeLayout);
         super.onDestroy();
+    }
+
+    public void printInstalledCertificates() {
+        try {
+            KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+
+            if (ks != null) {
+                ks.load(null, null);
+                Enumeration<String> aliases = ks.aliases();
+                DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+
+                int count = 0;
+                while (aliases.hasMoreElements()) {
+
+                    String alias = (String) aliases.nextElement();
+
+                    java.security.cert.X509Certificate cert = (java.security.cert.X509Certificate) ks.getCertificate(alias);
+//                    //To print System Certs only
+//                    if(cert.getIssuerDN().getName().contains("system")){
+//                        Log.d(TAG, "1 printInstalledCertificates: " + cert.getIssuerDN().getName());
+//                    }
+//
+//                    //To print User Certs only
+//                    if(cert.getIssuerDN().getName().contains("user")){
+//                        Log.d(TAG, "2 printInstalledCertificates: " + cert.getIssuerDN().getName());
+//                    }
+
+                    ++count;
+
+                    //To print all certs
+                    Log.d(TAG, "颁发给: \r\n"
+                            + cert.getIssuerX500Principal() + "\r\n"
+                            + "序列号 :" + cert.getSerialNumber()
+                            + "\r\n\r\n"
+                            + "颁发者: \r\n"
+                            + cert.getSubjectX500Principal()
+                            + "\r\n\r\n"
+                            + "有效期: \r\n"
+                            + "颁发时间: " + format.format(cert.getNotBefore()) + "\r\n"
+                            + "有效期至: " + format.format(cert.getNotAfter()) + "\r\n"
+                    );
+                }
+
+                Log.d(TAG, "printInstalledCertificates: count->" + count);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (java.security.cert.CertificateException e) {
+            e.printStackTrace();
+        }
     }
 }

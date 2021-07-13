@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AccessibilityServiceSample">
         <service
-            android:name="com.cw.GloabKeyLinstenService"
+            android:name=".GloabKeyLinstenService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
             android:enabled="true"
             android:exported="true">
